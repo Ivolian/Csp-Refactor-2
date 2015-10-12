@@ -104,8 +104,7 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
 
     private void openBook(com.unicorn.csp.model.Book book) {
 
-        // todo 目前暂时用 BookDetailActivity 解决
-        // todo 貌似 bookId 和 bookPath 都不能重复
+        // TODO
         Book bookzz = new Book(book.getOrderNo(), getBookPath(book), book.getName(), null, null);
         Intent intent = new Intent(activity, BookInfoActivity.class);
         FBReaderIntents.putBookExtra(intent, bookzz);

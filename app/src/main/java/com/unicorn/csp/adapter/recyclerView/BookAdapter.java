@@ -21,6 +21,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
+import com.unicorn.csp.activity.PdfActivity;
 import com.unicorn.csp.model.BookHelper;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.ToastUtils;
@@ -108,6 +109,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     }
 
     private void openBook(com.unicorn.csp.model.Book book) {
+
+        if (book.getEbookFilename().endsWith(".pdf")){
+            String pdfPath = getBookPath(book);
+            Intent intent =new Intent(activity, PdfActivity.class);
+            intent.putExtra("pdfPath",pdfPath);
+            activity.startActivity(intent);
+            return;
+        }
 
         // todo 目前暂时用 BookDetailActivity 解决
         // todo 貌似 bookId 和 bookPath 都不能重复
