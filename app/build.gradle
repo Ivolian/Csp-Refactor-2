@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'csp'
-            keyPassword 'csp'
-            storeFile file('C:/Users/Administrator/Desktop/Csp/csp.jks')
-            storePassword 'cspcsp'
-        }
-    }
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
     defaultConfig {
@@ -22,10 +14,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
-        }
-        debug {
-            signingConfig signingConfigs.config
         }
     }
     packagingOptions {
@@ -62,7 +50,6 @@ dependencies {
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.5'
     compile 'com.mcxiaoke.volley:library:1.0.17'
     compile 'de.greenrobot:greendao:1.3.7'
-    //    compile 'im.dino:dbinspector:3.2.1@aar'
     compile 'com.quinny898.library.persistentsearch:library:1.0.0-SNAPSHOT'
     compile(name: 'SmartTabLayout-mc', ext: 'aar')
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
@@ -77,13 +64,9 @@ dependencies {
     compile(name: 'fbreader-library', ext: 'aar')
     compile 'cat.ereza:customactivityoncrash:1.2.0'
     compile 'me.grantland:autofittextview:0.2.1'
-    compile(name: 'MPChartLib', ext: 'aar')
-    compile 'com.github.lzyzsd.randomcolor:library:1.0.0'
-    compile 'com.bignerdranch.android:expandablerecyclerview:1.0.3'
     compile(name: 'library-release', ext: 'aar')
     compile 'commons-io:commons-io:2.4'
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
-    //    compile(name: 'emojicon', ext: 'aar')
     compile files('libs/jpush-sdk-release1.8.0.jar')
     compile 'com.r0adkll:slidableactivity:2.0.4'
     compile 'org.adw.library:discrete-seekbar:1.0.0'
