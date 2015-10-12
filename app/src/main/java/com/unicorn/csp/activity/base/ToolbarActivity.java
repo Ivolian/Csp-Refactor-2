@@ -21,7 +21,7 @@ public abstract class ToolbarActivity extends ButterKnifeActivity {
     Toolbar toolbar;
 
     @Bind(R.id.atv_toolbar_title)
-    AutofitTextView atvToolbarTitle;
+    public AutofitTextView atvToolbarTitle;
 
 
     // ========================== home键后退 ==========================
