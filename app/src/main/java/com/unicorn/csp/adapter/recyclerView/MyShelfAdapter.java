@@ -16,6 +16,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
+import com.unicorn.csp.activity.PdfActivity;
 import com.unicorn.csp.model.BookHelper;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.ToastUtils;
@@ -104,7 +105,13 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
 
     private void openBook(com.unicorn.csp.model.Book book) {
 
-        // TODO
+        if (book.getEbookFilename().endsWith(".pdf")) {
+            Intent intent = new Intent(activity, PdfActivity.class);
+            intent.putExtra("book", book);
+            activity.startActivity(intent);
+            return;
+        }
+
         Book bookzz = new Book(book.getOrderNo(), getBookPath(book), book.getName(), null, null);
         Intent intent = new Intent(activity, BookInfoActivity.class);
         FBReaderIntents.putBookExtra(intent, bookzz);

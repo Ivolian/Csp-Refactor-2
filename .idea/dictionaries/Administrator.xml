@@ -2,6 +2,7 @@
   <dictionary name="Administrator">
     <words>
       <w>pdfview</w>
+      <w>seekbar</w>
     </words>
   </dictionary>
 </component>

@@ -110,10 +110,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     private void openBook(com.unicorn.csp.model.Book book) {
 
-        if (book.getEbookFilename().endsWith(".pdf")){
-            String pdfPath = getBookPath(book);
-            Intent intent =new Intent(activity, PdfActivity.class);
-            intent.putExtra("pdfPath",pdfPath);
+        if (book.getEbookFilename().endsWith(".pdf")) {
+            Intent intent = new Intent(activity, PdfActivity.class);
+            intent.putExtra("book", book);
             activity.startActivity(intent);
             return;
         }
