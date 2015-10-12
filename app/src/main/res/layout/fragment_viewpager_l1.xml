@@ -1,0 +1,31 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.unicorn.csp.other.mycode.MyViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize" />
+
+    <app.mosn.zdepthshadowlayout.ZDepthShadowLayout xmlns:shadow="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar_shadow_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        shadow:z_depth="z_depth1"
+        shadow:z_depth_paddingBottom="z_depth1"
+        shadow:z_depth_paddingLeft="z_depth0"
+        shadow:z_depth_paddingRight="z_depth0"
+        shadow:z_depth_paddingTop="z_depth0"
+        shadow:z_depth_shape="rect">
+
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white" />
+
+    </app.mosn.zdepthshadowlayout.ZDepthShadowLayout>
+
+</FrameLayout>

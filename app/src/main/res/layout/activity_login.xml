@@ -1,0 +1,81 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:flatui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/background_material_light"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="贵州法院"
+            android:textSize="22sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
+            android:layout_marginTop="6dp"
+            android:text="移动学习平台"
+            android:textSize="22sp" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/et_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="请输入账号"
+            app:met_floatingLabel="normal"
+            app:met_iconLeft="@drawable/login_account"
+            app:met_primaryColor="?attr/colorAccent" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            app:met_floatingLabel="normal"
+            app:met_iconLeft="@drawable/login_password"
+            app:met_primaryColor="?attr/colorAccent" />
+
+        <CheckBox
+            android:id="@+id/cb_remember_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="20dp"
+            android:checked="false"
+            android:text="记住我" />
+
+        <com.ivo.flatbutton.FlatButton
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="60dp"
+            android:enabled="false"
+            android:text="登录"
+            android:textSize="18sp"
+            flatui:fl_mainColor="?attr/colorAccent"
+            flatui:fl_textAppearance="fl_none"
+            flatui:fl_touchEffect="fl_ease" />
+
+    </LinearLayout>
+
+    <include layout="@layout/toolbar_with_shadow" />
+
+</FrameLayout>
+
+

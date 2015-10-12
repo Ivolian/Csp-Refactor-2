@@ -1,0 +1,23 @@
+<resources>
+
+    <string name="app_name">移动学习平台</string>
+
+    <string name="hot_spot">资讯热点</string>
+    <string name="study_field">学习园地</string>
+    <string name="book_city">学术交流</string>
+    <string name="my_study">我的学习</string>
+    <string name="social_region">互动专区</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="empty_string"> </string>
+
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">发生了难以预料的错误，真是万分抱歉。</string>
+    <string name="customactivityoncrash_error_activity_unknown_exception">Unknown exception</string>
+    <string name="customactivityoncrash_error_activity_restart_app">重启应用</string>
+    <string name="customactivityoncrash_error_activity_close_app">Close app</string>
+    <string name="customactivityoncrash_error_activity_error_details">查看错误详情</string>
+    <string name="customactivityoncrash_error_activity_error_details_title">错误详情</string>
+    <string name="customactivityoncrash_error_activity_error_details_close">关闭</string>
+
+</resources>

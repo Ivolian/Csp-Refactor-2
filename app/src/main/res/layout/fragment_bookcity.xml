@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.unicorn.csp.other.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="账号: sygzgf   密码: sygzgf123"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_heightPercent="15%" />
+
+    <ImageView
+        android:id="@+id/tv_zhiwang1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/zhiwang1"
+        app:layout_heightPercent="15%"
+        app:layout_marginBottomPercent="1%"
+        app:layout_marginTopPercent="1%" />
+
+    <ImageView
+        android:id="@+id/tv_zhiwang2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/zhiwang2"
+        app:layout_heightPercent="15%"
+        app:layout_marginBottomPercent="1%"
+        app:layout_marginTopPercent="1%" />
+
+    <ImageView
+        android:id="@+id/tv_zhiwang3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/zhiwang3"
+        app:layout_heightPercent="15%"
+        app:layout_marginBottomPercent="1%"
+        app:layout_marginTopPercent="1%" />
+
+    <ImageView
+        android:id="@+id/tv_zhiwang4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/zhiwang4"
+        app:layout_heightPercent="15%"
+        app:layout_marginBottomPercent="1%"
+        app:layout_marginTopPercent="1%" />
+
+    <ImageView
+        android:id="@+id/tv_zhiwang5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/zhiwang5"
+        app:layout_heightPercent="15%"
+        app:layout_marginBottomPercent="2%"
+        app:layout_marginTopPercent="1%" />
+
+</com.unicorn.csp.other.PercentLinearLayout>
+

@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.GreenMatter.Light.DarkActionBar">
+        <item name="matColorPrimary">@color/primary</item>
+        <item name="matColorPrimaryDark">@color/primary_dark</item>
+        <item name="matColorAccent">@color/accent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+</resources>
