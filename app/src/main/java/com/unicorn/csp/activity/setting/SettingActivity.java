@@ -30,10 +30,10 @@ public class SettingActivity extends ToolbarActivity {
         setContentView(R.layout.activity_setting);
         initToolbar("更多设置", true);
         enableSlidr();
-        initSbBrightness();
+        initDsbBrightness();
     }
 
-    private void initSbBrightness() {
+    private void initDsbBrightness() {
 
         // 亮度手动调节模式
         Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);

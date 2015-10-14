@@ -11,8 +11,10 @@ import com.joanzapata.pdfview.listener.OnLoadCompleteListener;
 import com.joanzapata.pdfview.listener.OnPageChangeListener;
 import com.malinskiy.materialicons.IconDrawable;
 import com.malinskiy.materialicons.Iconify;
+import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
+import com.unicorn.csp.greendao.PdfHistory;
 import com.unicorn.csp.model.Book;
 import com.unicorn.csp.utils.BookUtils;
 
@@ -55,6 +57,10 @@ public class PdfActivity extends ToolbarActivity implements OnPageChangeListener
     private void initViews() {
 
         String pdfPath = BookUtils.getBookPath(book);
+
+        // 好像 id 必须是 long 或 string
+        PdfHistory pdfHistory = MyApplication.getPdfHistoryDao().load(book.getId());
+        int defaultPage = pdfHistory == null ? 1 : pdfHistory.getPage();
         pdfView.fromFile(new File(pdfPath))
                 .enableSwipe(true)
                 .onPageChange(this)
@@ -64,6 +70,7 @@ public class PdfActivity extends ToolbarActivity implements OnPageChangeListener
                         initSeekBar();
                     }
                 })
+                .defaultPage(defaultPage)
                 .load();
     }
 
@@ -131,5 +138,24 @@ public class PdfActivity extends ToolbarActivity implements OnPageChangeListener
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    // ========================== onBackPressed ==========================
+
+    @Override
+    public void onBackPressed() {
+
+        saveOrUpdatePdfHistory();
+        super.onBackPressed();
+    }
+
+    private void saveOrUpdatePdfHistory() {
+
+        PdfHistory pdfHistory = new PdfHistory();
+        pdfHistory.setId(book.getId());
+        pdfHistory.setPage(pdfView.getCurrentPage() + 1);
+        MyApplication.getPdfHistoryDao().insertOrReplace(pdfHistory);
+    }
+
 
 }

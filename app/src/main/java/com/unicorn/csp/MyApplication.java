@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.unicorn.csp.greendao.DaoMaster;
 import com.unicorn.csp.greendao.DaoSession;
 import com.unicorn.csp.greendao.MenuDao;
+import com.unicorn.csp.greendao.PdfHistoryDao;
 import com.unicorn.csp.greendao.SearchHistoryDao;
 import com.unicorn.csp.volley.MyVolley;
 
@@ -36,25 +37,30 @@ public class MyApplication extends ZLAndroidApplication {
 
     private static DaoSession daoSession;
 
-    public static MenuDao getMenuDao(){
+    public static MenuDao getMenuDao() {
 
-        return  daoSession.getMenuDao();
+        return daoSession.getMenuDao();
     }
 
-    public static SearchHistoryDao getSearchHistoryDao(){
+    public static SearchHistoryDao getSearchHistoryDao() {
 
         return daoSession.getSearchHistoryDao();
     }
 
-    private void initGreenDao(){
+    public static PdfHistoryDao getPdfHistoryDao() {
 
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,"csp-db",null);
+        return daoSession.getPdfHistoryDao();
+    }
+
+    private void initGreenDao() {
+
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "csp-db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
     }
 
-    private void initJPush(){
+    private void initJPush() {
 
         JPushInterface.init(this);
     }
