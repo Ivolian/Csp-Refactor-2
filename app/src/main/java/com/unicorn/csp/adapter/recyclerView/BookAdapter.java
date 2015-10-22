@@ -23,6 +23,7 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
 import com.unicorn.csp.model.BookHelper;
+import com.unicorn.csp.other.LoginHelper;
 import com.unicorn.csp.other.PdfHelper;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.ToastUtils;
@@ -111,6 +112,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     private void openBook(com.unicorn.csp.model.Book book) {
 
+        LoginHelper.checkLoginTime();
         if (book.getEbookFilename().endsWith(".pdf")) {
             String pdfPath = getBookPath(book);
             Uri uri = Uri.parse(pdfPath);
@@ -129,6 +131,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         FBReaderIntents.putBookExtra(intent, bookzz);
         OrientationUtil.startActivity(activity, intent);
     }
+
+
+
 
     private void downloadBook(final com.unicorn.csp.model.Book book) {
 

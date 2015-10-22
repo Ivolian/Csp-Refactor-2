@@ -27,6 +27,7 @@ import com.malinskiy.materialicons.Iconify;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
 import com.unicorn.csp.model.News;
+import com.unicorn.csp.other.LoginHelper;
 import com.unicorn.csp.other.TinyDB;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.other.webview.VideoEnabledWebChromeClient;
@@ -73,10 +74,8 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
         setContentView(R.layout.activity_news_detail);
         initToolbar(news.getTitle(), true);
         enableSlidr();
-
         initViews();
-
-
+        LoginHelper.checkLoginTime();
     }
 
     private void initViews() {

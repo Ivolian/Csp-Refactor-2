@@ -19,6 +19,7 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
 import com.unicorn.csp.model.BookHelper;
+import com.unicorn.csp.other.LoginHelper;
 import com.unicorn.csp.other.PdfHelper;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.ToastUtils;
@@ -107,6 +108,7 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
 
     private void openBook(com.unicorn.csp.model.Book book) {
 
+        LoginHelper.checkLoginTime();
         if (book.getEbookFilename().endsWith(".pdf")) {
             String pdfPath = getBookPath(book);
             Uri uri = Uri.parse(pdfPath);
@@ -122,6 +124,7 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
         FBReaderIntents.putBookExtra(intent, bookzz);
         OrientationUtil.startActivity(activity, intent);
     }
+
 
     private void downloadBook(final com.unicorn.csp.model.Book book) {
 
@@ -187,7 +190,7 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
         if (book.getEbookFilename().endsWith("pdf")) {
             int page = PdfHelper.getPDFPage(book, activity);
             int pageCount = PdfHelper.getPDFPageCount(book, activity);
-            percent = pageCount!= 0 ? page * 100 /pageCount : 0;
+            percent = pageCount != 0 ? page * 100 / pageCount : 0;
             viewHolder.readProgress.setProgress(percent);
         }
 

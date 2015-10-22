@@ -26,6 +26,7 @@ import com.unicorn.csp.volley.toolbox.VolleyErrorHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,6 +48,8 @@ public class LoginActivity extends ToolbarActivity {
     public static final String SF_PASSWORD = "password";
 
     public static final String SF_REMEMBER_ME = "rememberMe";
+
+    public static final String SF_LAST_LOGIN_TIME = "lastLoginTime";
 
 
     // ========================== views ==========================
@@ -77,6 +80,18 @@ public class LoginActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initToolbar("登录", false);
+        initViews();
+    }
+
+    private void initViews() {
+
+        TinyDB tinyDB = new TinyDB(this);
+        String username = tinyDB.getString(SF_USERNAME);
+        etUsername.setText(username);
+        String password = tinyDB.getString(SF_PASSWORD);
+        etPassword.setText(password);
+        boolean rememberMe = tinyDB.getBoolean(SF_REMEMBER_ME, false);
+        cbRememberMe.setChecked(rememberMe);
     }
 
 
@@ -247,10 +262,11 @@ public class LoginActivity extends ToolbarActivity {
 
     private void storeLoginInfo() {
 
-        TinyDB tinyDB = new TinyDB(this);
+        TinyDB tinyDB = new TinyDB(MyApplication.getInstance());
         tinyDB.putString(SF_USERNAME, getUsername());
         tinyDB.putString(SF_PASSWORD, getPassword());
         tinyDB.putBoolean(SF_REMEMBER_ME, cbRememberMe.isChecked());
+        tinyDB.putLong(SF_LAST_LOGIN_TIME, new Date().getTime());
     }
 
 
