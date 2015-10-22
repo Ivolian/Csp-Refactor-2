@@ -20,11 +20,9 @@ public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig menuDaoConfig;
     private final DaoConfig searchHistoryDaoConfig;
-    private final DaoConfig pdfHistoryDaoConfig;
 
     private final MenuDao menuDao;
     private final SearchHistoryDao searchHistoryDao;
-    private final PdfHistoryDao pdfHistoryDao;
 
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
@@ -36,22 +34,16 @@ public class DaoSession extends AbstractDaoSession {
         searchHistoryDaoConfig = daoConfigMap.get(SearchHistoryDao.class).clone();
         searchHistoryDaoConfig.initIdentityScope(type);
 
-        pdfHistoryDaoConfig = daoConfigMap.get(PdfHistoryDao.class).clone();
-        pdfHistoryDaoConfig.initIdentityScope(type);
-
         menuDao = new MenuDao(menuDaoConfig, this);
         searchHistoryDao = new SearchHistoryDao(searchHistoryDaoConfig, this);
-        pdfHistoryDao = new PdfHistoryDao(pdfHistoryDaoConfig, this);
 
         registerDao(Menu.class, menuDao);
         registerDao(SearchHistory.class, searchHistoryDao);
-        registerDao(PdfHistory.class, pdfHistoryDao);
     }
     
     public void clear() {
         menuDaoConfig.getIdentityScope().clear();
         searchHistoryDaoConfig.getIdentityScope().clear();
-        pdfHistoryDaoConfig.getIdentityScope().clear();
     }
 
     public MenuDao getMenuDao() {
@@ -60,10 +52,6 @@ public class DaoSession extends AbstractDaoSession {
 
     public SearchHistoryDao getSearchHistoryDao() {
         return searchHistoryDao;
-    }
-
-    public PdfHistoryDao getPdfHistoryDao() {
-        return pdfHistoryDao;
     }
 
 }

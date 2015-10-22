@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.unicorn.csp.greendao.DaoMaster;
 import com.unicorn.csp.greendao.DaoSession;
 import com.unicorn.csp.greendao.MenuDao;
-import com.unicorn.csp.greendao.PdfHistoryDao;
 import com.unicorn.csp.greendao.SearchHistoryDao;
 import com.unicorn.csp.volley.MyVolley;
 
@@ -45,11 +44,6 @@ public class MyApplication extends ZLAndroidApplication {
     public static SearchHistoryDao getSearchHistoryDao() {
 
         return daoSession.getSearchHistoryDao();
-    }
-
-    public static PdfHistoryDao getPdfHistoryDao() {
-
-        return daoSession.getPdfHistoryDao();
     }
 
     private void initGreenDao() {

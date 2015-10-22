@@ -2,6 +2,7 @@ package com.unicorn.csp.adapter.recyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,13 +12,14 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.toolbox.NetworkImageView;
+import com.artifex.mupdfdemo.MuPDFActivity;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
-import com.unicorn.csp.activity.PdfActivity;
 import com.unicorn.csp.model.BookHelper;
+import com.unicorn.csp.other.PdfHelper;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.ToastUtils;
 import com.unicorn.csp.volley.MyVolley;
@@ -106,12 +108,15 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
     private void openBook(com.unicorn.csp.model.Book book) {
 
         if (book.getEbookFilename().endsWith(".pdf")) {
-            Intent intent = new Intent(activity, PdfActivity.class);
-            intent.putExtra("book", book);
+            String pdfPath = getBookPath(book);
+            Uri uri = Uri.parse(pdfPath);
+            Intent intent = new Intent(activity, MuPDFActivity.class);
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(uri);
+            intent.putExtra("pdfId", book.getId());
             activity.startActivity(intent);
             return;
         }
-
         Book bookzz = new Book(book.getOrderNo(), getBookPath(book), book.getName(), null, null);
         Intent intent = new Intent(activity, BookInfoActivity.class);
         FBReaderIntents.putBookExtra(intent, bookzz);
@@ -179,6 +184,12 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
         BookHelper.getBookReadingProgress(book);
         int percent = book.getDenominator() != 0 ? book.getNumerator() * 100 / book.getDenominator() : 0;
         viewHolder.readProgress.setProgress(percent);
+        if (book.getEbookFilename().endsWith("pdf")) {
+            int page = PdfHelper.getPDFPage(book, activity);
+            int pageCount = PdfHelper.getPDFPageCount(book, activity);
+            percent = pageCount!= 0 ? page * 100 /pageCount : 0;
+            viewHolder.readProgress.setProgress(percent);
+        }
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
