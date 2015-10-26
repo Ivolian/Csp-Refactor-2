@@ -32,6 +32,7 @@ import com.unicorn.csp.activity.setting.SettingActivity;
 import com.unicorn.csp.adapter.viewpager.ViewPagerAdapter;
 import com.unicorn.csp.greendao.Menu;
 import com.unicorn.csp.greendao.MenuDao;
+import com.unicorn.csp.model.UserInfo;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.other.greenmatter.SelectColorActivity;
 import com.unicorn.csp.utils.ToastUtils;
@@ -43,7 +44,6 @@ import butterknife.OnClick;
 
 
 public class MainActivity extends ToolbarActivity {
-
 
     // todo 用更酷的方法来完成
     // ========================== 保存选中项 ==========================
@@ -136,6 +136,23 @@ public class MainActivity extends ToolbarActivity {
                         return false;
                     }
                 }).build();
+
+        initDrawerHeader(drawer.getHeader());
+    }
+
+    private void initDrawerHeader(View header) {
+
+        UserInfo userInfo = (UserInfo)getIntent().getSerializableExtra("userInfo");
+        TextView tvThumbCount = (TextView) header.findViewById(R.id.tv_thumb_count);
+        tvThumbCount.setText("本月点赞: " + userInfo.getThumbCount());
+        TextView tvFavoriteNewsCount = (TextView) header.findViewById(R.id.tv_favorite_news_count);
+        tvFavoriteNewsCount.setText("本月关注: " + userInfo.getFavoriteNewsCount());
+        TextView tvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
+        tvCommentCount.setText("本月评论: " + userInfo.getCommentCount());
+        TextView tvReadTimes = (TextView) header.findViewById(R.id.tv_read_times);
+        tvReadTimes.setText("本月阅读: " + userInfo.getReadTimes());
+        TextView tvLoginTimes = (TextView) header.findViewById(R.id.tv_login_times);
+        tvLoginTimes.setText("本月登录: " + userInfo.getLoginTimes());
     }
 
     private void showChoiceDialog() {

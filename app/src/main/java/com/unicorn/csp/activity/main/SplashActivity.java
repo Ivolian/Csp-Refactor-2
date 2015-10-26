@@ -1,5 +1,6 @@
 package com.unicorn.csp.activity.main;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ButterKnifeActivity;
 import com.unicorn.csp.greendao.Menu;
+import com.unicorn.csp.model.UserInfo;
 import com.unicorn.csp.other.TinyDB;
 import com.unicorn.csp.utils.AppUtils;
 import com.unicorn.csp.utils.ConfigUtils;
@@ -58,7 +60,10 @@ public class SplashActivity extends ButterKnifeActivity {
                             ConfigUtils.saveUserId(userId);
                             saveMenu(response);
 
-                            startActivityAndFinish(MainActivity.class);
+                            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                            intent.putExtra("userInfo", getUserInfo(response));
+                            startActivity(intent);
+                            finish();
                         } else {
                             startActivityAndFinish(LoginActivity.class);
                         }
@@ -200,6 +205,18 @@ public class SplashActivity extends ButterKnifeActivity {
 
         JPushInterface.onPause(this);
         super.onPause();
+    }
+
+
+    private UserInfo getUserInfo(JSONObject response) {
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setThumbCount(JSONUtils.getInt(response, "thumbCount", 0));
+        userInfo.setFavoriteNewsCount(JSONUtils.getInt(response, "favoriteNewsCount", 0));
+        userInfo.setCommentCount(JSONUtils.getInt(response, "commentCount", 0));
+        userInfo.setReadTimes(JSONUtils.getInt(response, "readTimes", 0));
+        userInfo.setLoginTimes(JSONUtils.getInt(response, "loginTimes", 0));
+        return userInfo;
     }
 
 

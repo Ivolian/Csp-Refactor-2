@@ -1,5 +1,6 @@
 package com.unicorn.csp.activity.main;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -15,6 +16,7 @@ import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
 import com.unicorn.csp.greendao.Menu;
+import com.unicorn.csp.model.UserInfo;
 import com.unicorn.csp.other.TinyDB;
 import com.unicorn.csp.utils.AppUtils;
 import com.unicorn.csp.utils.ConfigUtils;
@@ -138,7 +140,10 @@ public class LoginActivity extends ToolbarActivity {
                             saveMenu(response);
                             storeLoginInfo();
 
-                            startActivityAndFinish(MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("userInfo", getUserInfo(response));
+                            startActivity(intent);
+                            finish();
                         } else {
                             ToastUtils.show(JSONUtils.getString(response, "errorMsg", ""));
                         }
@@ -290,6 +295,20 @@ public class LoginActivity extends ToolbarActivity {
     private String getPassword() {
 
         return etPassword.getText().toString().trim();
+    }
+
+
+    //
+
+    private UserInfo getUserInfo(JSONObject response) {
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setThumbCount(JSONUtils.getInt(response, "thumbCount", 0));
+        userInfo.setFavoriteNewsCount(JSONUtils.getInt(response, "favoriteNewsCount", 0));
+        userInfo.setCommentCount(JSONUtils.getInt(response, "commentCount", 0));
+        userInfo.setReadTimes(JSONUtils.getInt(response, "readTimes", 0));
+        userInfo.setLoginTimes(JSONUtils.getInt(response, "loginTimes", 0));
+        return userInfo;
     }
 
 }
