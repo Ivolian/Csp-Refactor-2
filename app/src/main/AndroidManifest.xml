@@ -88,7 +88,7 @@
             android:name=".activity.question.AddAnswerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PdfActivity"
+            android:name=".activity.news.ThumbActivity"
             android:screenOrientation="portrait" />
 
         <!-- JPush -->

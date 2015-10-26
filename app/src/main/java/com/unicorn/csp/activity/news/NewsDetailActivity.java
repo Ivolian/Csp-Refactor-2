@@ -243,6 +243,7 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
                 .addItem(getIconDrawable(Iconify.IconValue.zmdi_thumb_up, 24))
                 .addItem(getIconDrawable(Iconify.IconValue.zmdi_comment_more, 25))
                 .addItem(getIconDrawable(Iconify.IconValue.zmdi_comment_text_alt, 25))
+                .addItem(getIconDrawable(Iconify.IconValue.zmdi_view_list, 25))
                 .attach(layout)
                 .withListener(this)
                 .build();
@@ -266,6 +267,9 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
                 break;
             case 3:
                 startAddCommentActivity();
+                break;
+            case 4:
+                startThumbActivity();
                 break;
         }
     }
@@ -369,6 +373,12 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
         return builder.toString();
     }
 
+    private void startThumbActivity() {
+
+        Intent intent = new Intent(this, ThumbActivity.class);
+        intent.putExtra("newsId", news.getId());
+        startActivity(intent);
+    }
 
     // =============================== textZoom ===============================
 
@@ -414,6 +424,5 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }
