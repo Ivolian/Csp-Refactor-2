@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -215,7 +216,8 @@ public class BookFragment extends LazyLoadFragment {
             String ebookFilename = JSONUtils.getString(bookJSONObject, "ebookFilename", "");
             String summary = JSONUtils.getString(bookJSONObject, "summary", "");
             String id = JSONUtils.getString(bookJSONObject, "id", "");
-            Book book = new Book(orderNo, name, picture, ebook, ebookFilename, summary, id);
+            Date eventTime = new Date(JSONUtils.getLong(bookJSONObject, "eventtime", 0));
+            Book book = new Book(orderNo, name, picture, ebook, ebookFilename, summary, id,eventTime);
             bookList.add(book);
         }
         return bookList;

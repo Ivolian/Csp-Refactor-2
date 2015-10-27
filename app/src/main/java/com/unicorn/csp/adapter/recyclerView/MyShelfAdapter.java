@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.toolbox.NetworkImageView;
 import com.artifex.mupdfdemo.MuPDFActivity;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.loopj.android.http.AsyncHttpClient;
@@ -22,8 +21,8 @@ import com.unicorn.csp.model.BookHelper;
 import com.unicorn.csp.other.LoginHelper;
 import com.unicorn.csp.other.PdfHelper;
 import com.unicorn.csp.utils.ConfigUtils;
+import com.unicorn.csp.utils.DateUtils;
 import com.unicorn.csp.utils.ToastUtils;
-import com.unicorn.csp.volley.MyVolley;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
@@ -33,8 +32,10 @@ import org.geometerplus.android.fbreader.library.BookInfoActivity;
 import org.geometerplus.fbreader.book.Book;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -59,17 +60,14 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
         @Bind(R.id.cardview)
         CardView cardView;
 
-        @Bind(R.id.niv_picture)
-        NetworkImageView nivPicture;
-
         @Bind(R.id.tv_book_name)
         TextView tvBookName;
 
-        @Bind(R.id.tv_summary)
-        TextView tvSummary;
-
         @Bind(R.id.progress)
         NumberProgressBar readProgress;
+
+        @Bind(R.id.tv_event_time)
+        TextView tvEventTime;
 
         ViewHolder(View view) {
             super(view);
@@ -180,9 +178,7 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
 
         final com.unicorn.csp.model.Book book = bookList.get(position);
         viewHolder.tvBookName.setText(book.getName());
-        viewHolder.tvSummary.setText(book.getSummary());
-        viewHolder.nivPicture.setDefaultImageResId(R.drawable.default_book);
-        viewHolder.nivPicture.setImageUrl(ConfigUtils.getBaseUrl() + book.getPicture(), MyVolley.getImageLoader());
+        viewHolder.tvEventTime.setText(DateUtils.getFormatDateString(book.getEventTime(), new SimpleDateFormat("MM-dd HH:mm", Locale.CHINA)));
 
         BookHelper.getBookReadingProgress(book);
         int percent = book.getDenominator() != 0 ? book.getNumerator() * 100 / book.getDenominator() : 0;

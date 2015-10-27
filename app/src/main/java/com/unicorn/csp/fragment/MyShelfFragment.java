@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -280,14 +281,15 @@ public class MyShelfFragment extends LazyLoadFragment {
         List<Book> bookList = new ArrayList<>();
         for (int i = 0; i != bookJSONArray.length(); i++) {
             JSONObject bookJSONObject = JSONUtils.getJSONObject(bookJSONArray, i);
-            Integer id2 = JSONUtils.getInt(bookJSONObject, "orderNo", 0);
+            Integer orderNo = JSONUtils.getInt(bookJSONObject, "orderNo", 0);
             String name = JSONUtils.getString(bookJSONObject, "name", "");
             String picture = JSONUtils.getString(bookJSONObject, "picture", "");
             String ebook = JSONUtils.getString(bookJSONObject, "ebook", "");
             String ebookFilename = JSONUtils.getString(bookJSONObject, "ebookFilename", "");
             String summary = JSONUtils.getString(bookJSONObject, "summary", "");
             String id = JSONUtils.getString(bookJSONObject, "id", "");
-            bookList.add(new Book(id2, name, picture, ebook, ebookFilename, summary, id));
+            Date eventTime = new Date(JSONUtils.getLong(bookJSONObject, "eventtime", 0));
+            bookList.add(new Book(orderNo, name, picture, ebook, ebookFilename, summary, id, eventTime));
         }
         return bookList;
     }

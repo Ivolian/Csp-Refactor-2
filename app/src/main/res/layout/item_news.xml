@@ -28,7 +28,7 @@
                 android:layout_weight="1"
                 android:text="最高人民法院出台服务保障“一带一路”意见"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2015-07-08 10:43"
-                    android:textSize="12sp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_comment_count"
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:text="评论 4867"
-                    android:textSize="12sp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_thumb_count"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="点赞 4867"
-                    android:textSize="12sp" />
+                    android:textSize="12dp" />
 
             </LinearLayout>
 

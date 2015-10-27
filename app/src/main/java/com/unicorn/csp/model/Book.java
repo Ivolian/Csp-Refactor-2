@@ -1,6 +1,7 @@
 package com.unicorn.csp.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 public class Book implements Serializable {
@@ -19,6 +20,8 @@ public class Book implements Serializable {
 
     private String id;
 
+    private Date eventTime;
+
     private Integer numerator;
 
     private Integer denominator;
@@ -26,7 +29,7 @@ public class Book implements Serializable {
     public Book() {
     }
 
-    public Book(Integer orderNo, String name, String picture, String ebook, String ebookFilename, String summary, String id) {
+    public Book(Integer orderNo, String name, String picture, String ebook, String ebookFilename, String summary, String id,Date eventTime) {
         this.orderNo = orderNo;
         this.name = name;
         this.picture = picture;
@@ -34,6 +37,7 @@ public class Book implements Serializable {
         this.ebookFilename = ebookFilename;
         this.summary = summary;
         this.id = id;
+        this.eventTime = eventTime;
     }
 
     public Integer getOrderNo() {
@@ -106,6 +110,14 @@ public class Book implements Serializable {
 
     public void setDenominator(Integer denominator) {
         this.denominator = denominator;
+    }
+
+    public Date getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(Date eventTime) {
+        this.eventTime = eventTime;
     }
 }
 
