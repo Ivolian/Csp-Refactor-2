@@ -117,6 +117,20 @@ public class LoginActivity extends ToolbarActivity {
     }
 
 
+//    @OnLongClick(R.id.btn_login)
+//    public boolean changeIp() {
+//        new MaterialDialog.Builder(this)
+//                .title("设置IP")
+//                .input("确认", "", new MaterialDialog.InputCallback() {
+//                    @Override
+//                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+//                        ConfigUtils.ip = input.toString();
+//                    }
+//                })
+//                .show();
+//        return true;
+//    }
+
     // ========================== 登录 ==========================
 
     @OnClick(R.id.btn_login)

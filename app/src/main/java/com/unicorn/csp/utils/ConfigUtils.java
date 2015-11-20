@@ -10,12 +10,18 @@ import java.io.File;
 
 public class ConfigUtils {
 
-    public static String getBaseUrl() {
+//    public static String ip = "58.16.65.7";
+    public static String ip = "192.168.7.53";
 
-//        return "http://115.28.239.33:8080/withub";
+//    public static String port = "8090";
+    public static String port = "3000";
+
+    public static String getBaseUrl() {
+        return "http://" + ip + ":" + port + "/withub";
+
 //        return "http://192.168.1.6:3000/withub";
-//        return "http://192.168.7.59:3000/withub";
-        return "http://58.16.65.7:8090/withub";
+//        return "http://192.168.7.57:3000/withub";
+//        return "http://58.16.65.7:8090/withub";
     }
 
 

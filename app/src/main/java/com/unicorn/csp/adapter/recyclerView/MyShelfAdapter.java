@@ -178,7 +178,7 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
 
         final com.unicorn.csp.model.Book book = bookList.get(position);
         viewHolder.tvBookName.setText(book.getName());
-        viewHolder.tvEventTime.setText(DateUtils.getFormatDateString(book.getEventTime(), new SimpleDateFormat("MM-dd HH:mm", Locale.CHINA)));
+        viewHolder.tvEventTime.setText(DateUtils.getFormatDateString(book.getEventTime(), new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)));
 
         BookHelper.getBookReadingProgress(book);
         int percent = book.getDenominator() != 0 ? book.getNumerator() * 100 / book.getDenominator() : 0;
