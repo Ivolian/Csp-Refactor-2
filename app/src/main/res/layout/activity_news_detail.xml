@@ -1,70 +1,67 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/nonVideoLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background_material_light"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/seekbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:background="@color/background_material_light"
-            android:orientation="vertical">
-
-            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-                android:id="@+id/seekbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                app:dsb_min="60"
-                app:dsb_max="140" />
-
-            <com.unicorn.csp.other.webview.VideoEnabledWebView
-                android:id="@+id/webview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-        <include layout="@layout/toolbar_with_shadow" />
-
-        <com.linroid.filtermenu.library.FilterMenuLayout
-            android:id="@+id/filter_menu_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:fm_centerBottom="100dp"
-            app:fm_centerRight="48dp"
-            app:fm_collapsedRadius="24dp"
-            app:fm_expandedRadius="96dp"
-            app:fm_primaryColor="?attr/colorAccent" />
-
-    </RelativeLayout>
-
-    <!-- View where the video will be shown when video goes fullscreen -->
-    <RelativeLayout
-        android:id="@+id/videoLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!-- View that will be shown while the fullscreen video loads. For example you could include
-        a "Loading..." message. However, in this particular example this view is actually defined in
-        view_loading_video.xml and inflated programmatically in ExampleActivity.java. The reason for
-        this is to keep the main layout (this file) cleaner. -->
-        <!-- <View
-            android:id="@+id/videoLoading"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="invisible" /> -->
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:dsb_max="140"
+            app:dsb_min="60" />
 
-    </RelativeLayout>
+        <cn.com.video.venvy.param.JjVideoRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+            <cn.com.video.venvy.param.JjVideoView
+                android:id="@+id/video"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/avloadingIndicatorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:visibility="visible"
+                app:indicator="BallPulse"
+                app:indicator_color="#eee" />
+
+        </cn.com.video.venvy.param.JjVideoRelativeLayout>
+
+        <com.github.ksoichiro.android.observablescrollview.ObservableWebView
+            android:visibility="gone"
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <include layout="@layout/toolbar_with_shadow" />
+
+    <com.linroid.filtermenu.library.FilterMenuLayout
+        android:id="@+id/filter_menu_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:fm_centerBottom="100dp"
+        app:fm_centerRight="48dp"
+        app:fm_collapsedRadius="24dp"
+        app:fm_expandedRadius="96dp"
+        app:fm_primaryColor="?attr/colorAccent" />
+
 
 </FrameLayout>
 
