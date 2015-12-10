@@ -13,4 +13,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="NewDetail" parent="Theme.GreenMatter.Light.DarkActionBar">
+        <item name="matColorPrimary">@color/primary</item>
+        <item name="matColorPrimaryDark">@color/primary_dark</item>
+        <item name="matColorAccent">@color/accent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>

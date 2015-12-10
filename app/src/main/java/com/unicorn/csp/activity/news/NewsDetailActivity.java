@@ -73,7 +73,6 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
         initToolbar(news.getTitle(), true);
-        enableSlidr();
         initViews();
         LoginHelper.checkLoginTime();
     }
@@ -139,7 +138,7 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
             // Subscribe to standard events, such as onProgressChanged()...
             @Override
             public void onProgressChanged(WebView view, int progress) {
-                // Your code...
+
             }
         };
         webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
@@ -158,7 +157,6 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
                     }
                 } else {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
                     WindowManager.LayoutParams attrs = getWindow().getAttributes();
                     attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
                     attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
