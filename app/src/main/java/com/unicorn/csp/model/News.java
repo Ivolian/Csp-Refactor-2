@@ -17,15 +17,14 @@ public class News implements Serializable {
     private int thumbCount;
 
     private String picture;
+    private int hasVideo;
 
-    public News(String id, String title, Date time, int commentCount, int thumbCount, String picture) {
-        this.id = id;
-        this.title = title;
-        this.time = time;
-        this.commentCount = commentCount;
-        this.thumbCount = thumbCount;
-        this.picture = picture;
-    }
+    private int videoType;
+
+    private String videoUrl;
+
+   //
+
 
     public String getId() {
         return id;
@@ -73,5 +72,29 @@ public class News implements Serializable {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public int getHasVideo() {
+        return hasVideo;
+    }
+
+    public void setHasVideo(int hasVideo) {
+        this.hasVideo = hasVideo;
+    }
+
+    public int getVideoType() {
+        return videoType;
+    }
+
+    public void setVideoType(int videoType) {
+        this.videoType = videoType;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }
