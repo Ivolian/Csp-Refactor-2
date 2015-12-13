@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -274,39 +272,37 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         viewHolder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                new MaterialDialog.Builder(activity)
+                        .items(new CharSequence[]{"加入我的书架", "查看评论", "查看点赞", "删除缓存"})
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                switch (text.toString()) {
+                                    case "加入我的书架":
+                                        addFavoriteBook(book.getId());
+                                        break;
+                                    case "删除缓存":
+                                        if (isBookExist(book)) {
+                                            showConfirmDeleteDialog(book);
+                                        } else {
+                                            ToastUtils.show("该书籍尚未缓存");
+                                        }
+                                        break;
+                                    case "查看评论":
+                                        Intent intent = new Intent(activity, BookCommentActivity.class);
+                                        intent.putExtra("bookId", book.getId());
+                                        activity.startActivity(intent);
+                                        break;
+                                    case "查看点赞":
+                                        Intent intent2 = new Intent(activity, BookThumbActivity.class);
+                                        intent2.putExtra("bookId", book.getId());
+                                        activity.startActivity(intent2);
+                                        break;
 
-                PopupMenu popupMenu = new PopupMenu(activity, v);
-                popupMenu.inflate(R.menu.book_pop_menu);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.add_to_my_shelf:
-                                addFavoriteBook(book.getId());
-                                return true;
-                            case R.id.delete:
-                                if (isBookExist(book)) {
-                                    showConfirmDeleteDialog(book);
-                                } else {
-                                    ToastUtils.show("该书籍尚未缓存");
                                 }
-
-                                return true;
-                            case R.id.comment:
-                                Intent intent = new Intent(activity, BookCommentActivity.class);
-                                intent.putExtra("bookId", book.getId());
-                                activity.startActivity(intent);
-                                return true;
-                            case R.id.thumb:
-                                Intent intent2 = new Intent(activity, BookThumbActivity.class);
-                                intent2.putExtra("bookId", book.getId());
-                                activity.startActivity(intent2);
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.show();
+                            }
+                        })
+                        .show();
                 return true;
             }
         });

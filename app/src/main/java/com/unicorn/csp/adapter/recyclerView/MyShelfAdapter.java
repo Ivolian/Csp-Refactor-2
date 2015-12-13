@@ -17,6 +17,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
+import com.unicorn.csp.activity.news.BookCommentActivity;
+import com.unicorn.csp.activity.news.BookThumbActivity;
 import com.unicorn.csp.model.BookHelper;
 import com.unicorn.csp.other.LoginHelper;
 import com.unicorn.csp.other.PdfHelper;
@@ -206,6 +208,36 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
                 } else {
                     showConfirmDownloadDialog(book);
                 }
+            }
+        });
+
+
+
+        viewHolder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new MaterialDialog.Builder(activity)
+                        .items(new CharSequence[]{"查看评论", "查看点赞"})
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                switch (text.toString()) {
+                                    case "查看评论":
+                                        Intent intent = new Intent(activity, BookCommentActivity.class);
+                                        intent.putExtra("bookId", book.getId());
+                                        activity.startActivity(intent);
+                                        break;
+                                    case "查看点赞":
+                                        Intent intent2 = new Intent(activity, BookThumbActivity.class);
+                                        intent2.putExtra("bookId", book.getId());
+                                        activity.startActivity(intent2);
+                                        break;
+
+                                }
+                            }
+                        })
+                        .show();
+                return true;
             }
         });
     }
