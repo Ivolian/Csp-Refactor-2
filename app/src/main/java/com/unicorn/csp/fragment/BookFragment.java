@@ -216,7 +216,7 @@ public class BookFragment extends LazyLoadFragment {
             String ebookFilename = JSONUtils.getString(bookJSONObject, "ebookFilename", "");
             String summary = JSONUtils.getString(bookJSONObject, "summary", "");
             String id = JSONUtils.getString(bookJSONObject, "id", "");
-            Date eventTime = new Date(JSONUtils.getLong(bookJSONObject, "eventtime", 0));
+            Date eventTime = new Date(JSONUtils.getLong(bookJSONObject, "eventTime", 0));
             Book book = new Book(orderNo, name, picture, ebook, ebookFilename, summary, id,eventTime);
             bookList.add(book);
         }
