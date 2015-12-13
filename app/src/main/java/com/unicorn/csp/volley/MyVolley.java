@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,9 +31,11 @@ public class MyVolley {
         final int cacheSize = maxMemory / 8;
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> mCache = new LruCache<>(cacheSize);
+
             public void putBitmap(String url, Bitmap bitmap) {
                 mCache.put(url, bitmap);
             }
+
             public Bitmap getBitmap(String url) {
                 return mCache.get(url);
             }
@@ -40,8 +43,8 @@ public class MyVolley {
 
     }
 
-    public static void addRequest(Request request){
-
+    public static void addRequest(Request request) {
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, 1f));
         getRequestQueue().add(request);
     }
 
