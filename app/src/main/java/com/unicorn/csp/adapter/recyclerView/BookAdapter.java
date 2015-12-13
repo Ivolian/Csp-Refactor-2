@@ -22,6 +22,7 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.news.BookCommentActivity;
+import com.unicorn.csp.activity.news.BookThumbActivity;
 import com.unicorn.csp.model.BookHelper;
 import com.unicorn.csp.other.LoginHelper;
 import com.unicorn.csp.other.PdfHelper;
@@ -78,7 +79,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         @Bind(R.id.tv_comment_count)
         TextView tvCommentCount;
 
-
+        @Bind(R.id.tv_thumb_count)
+        TextView tvThumbCount;
 
         ViewHolder(View view) {
             super(view);
@@ -246,6 +248,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         viewHolder.tvBookName.setText(book.getName());
         viewHolder.tvEventTime.setText(DateUtils.getFormatDateString(book.getEventTime(), new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)));
         viewHolder.tvCommentCount.setText("评论 " + book.getCommentCount());
+        viewHolder.tvThumbCount.setText("点赞 " + book.getThumbCount());
 
         BookHelper.getBookReadingProgress(book);
         int percent = book.getDenominator() != 0 ? book.getNumerator() * 100 / book.getDenominator() : 0;
@@ -293,6 +296,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                                 Intent intent = new Intent(activity, BookCommentActivity.class);
                                 intent.putExtra("bookId", book.getId());
                                 activity.startActivity(intent);
+                                return true;
+                            case R.id.thumb:
+                                Intent intent2 = new Intent(activity, BookThumbActivity.class);
+                                intent2.putExtra("bookId", book.getId());
+                                activity.startActivity(intent2);
                                 return true;
                         }
                         return false;

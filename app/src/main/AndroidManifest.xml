@@ -98,7 +98,9 @@
         <activity
             android:name=".activity.news.ThumbActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".activity.news.BookThumbActivity"
+            android:screenOrientation="portrait" />
         <!-- JPush -->
 
         <!-- Required -->

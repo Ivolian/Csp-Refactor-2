@@ -293,6 +293,10 @@ public class MyShelfFragment extends LazyLoadFragment {
 
             int commentCount = JSONUtils.getInt(bookJSONObject, "commentCount", 0);
             book.setCommentCount(commentCount);
+
+            int thumbCount = JSONUtils.getInt(bookJSONObject, "thumbCount", 0);
+            book.setThumbCount(thumbCount);
+
         bookList.add(book);
         }
         return bookList;

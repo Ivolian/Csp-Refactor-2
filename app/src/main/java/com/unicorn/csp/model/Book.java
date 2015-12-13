@@ -28,6 +28,8 @@ public class Book implements Serializable {
 
     private Integer commentCount;
 
+    private Integer thumbCount;
+
     public Book() {
     }
 
@@ -128,6 +130,15 @@ public class Book implements Serializable {
 
     public void setCommentCount(Integer commentCount) {
         this.commentCount = commentCount;
+    }
+
+
+    public Integer getThumbCount() {
+        return thumbCount;
+    }
+
+    public void setThumbCount(Integer thumbCount) {
+        this.thumbCount = thumbCount;
     }
 }
 

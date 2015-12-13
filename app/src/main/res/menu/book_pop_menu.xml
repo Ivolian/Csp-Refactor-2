@@ -6,6 +6,9 @@
         android:id="@+id/comment"
         android:title="查看评论" />
     <item
+        android:id="@+id/thumb"
+        android:title="查看点赞" />
+    <item
         android:id="@+id/delete"
         android:title="删除缓存" />
 </menu>
