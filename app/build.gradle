@@ -72,6 +72,7 @@ dependencies {
     compile 'org.adw.library:discrete-seekbar:1.0.0'
     compile(name: 'android-pdfview-debug', ext: 'aar')
     compile(name: 'mupdf', ext: 'aar')
-//    compile 'com.facebook.stetho:stetho:1.2.0'
-
+    compile(name: 'video', ext: 'aar')
+    compile 'com.wang.avi:library:1.0.1'
+    compile 'com.nineoldandroids:library:2.4.0'
 }
