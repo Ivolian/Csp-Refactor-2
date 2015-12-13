@@ -2,113 +2,153 @@ package com.unicorn.csp.activity.news;
 
 import android.animation.ArgbEvaluator;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
+import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ObservableWebView;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.linroid.filtermenu.library.FilterMenu;
 import com.linroid.filtermenu.library.FilterMenuLayout;
 import com.malinskiy.materialicons.IconDrawable;
 import com.malinskiy.materialicons.Iconify;
 import com.unicorn.csp.R;
-import com.unicorn.csp.activity.base.ToolbarActivity;
 import com.unicorn.csp.model.News;
 import com.unicorn.csp.other.LoginHelper;
 import com.unicorn.csp.other.TinyDB;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
-import com.unicorn.csp.other.webview.VideoEnabledWebChromeClient;
-import com.unicorn.csp.other.webview.VideoEnabledWebView;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.ToastUtils;
 import com.unicorn.csp.volley.MyVolley;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.com.video.venvy.param.JjVideoRelativeLayout;
+import cn.com.video.venvy.param.JjVideoView;
+import cn.com.video.venvy.param.OnJjOpenSuccessListener;
+import cn.com.video.venvy.param.VideoJjMediaContoller;
+import me.grantland.widget.AutofitTextView;
 
 
-public class NewsDetailActivity extends ToolbarActivity implements ObservableScrollViewCallbacks, FilterMenu.OnMenuChangeListener {
+public class NewsDetailActivity extends AppCompatActivity implements ObservableScrollViewCallbacks, FilterMenu.OnMenuChangeListener {
 
-    /*
-        新闻详情界面
-        1. 可以通过 VideoEnabledWebView 加载服务器上的视频
-        也可以通过优酷连接什么的，直接播放优酷的视频。
-        2. VideoEnabledWebView 和 video 标签研究较少，有需要时再说
-     */
+
+    // =============================== extra ===============================
 
     @InjectExtra("news")
     News news;
 
+
+    // =============================== extra ===============================
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Bind(R.id.atv_toolbar_title)
+    AutofitTextView atvToolbarTitle;
+
+    @Bind(R.id.videoLayout)
+    JjVideoRelativeLayout jjVideoRelativeLayout;
+
+    @Bind(R.id.video)
+    JjVideoView videoView;
+
+    @Bind(R.id.avloadingIndicatorView)
+    AVLoadingIndicatorView avLoadingIndicatorView;
+
+    @Bind(R.id.webview)
+    ObservableWebView webView;
+
     @Bind(R.id.filter_menu_layout)
     FilterMenuLayout filterMenuLayout;
 
-    @Bind(R.id.webview)
-    VideoEnabledWebView webView;
-
-    VideoEnabledWebChromeClient webChromeClient;
-
-    @Bind(R.id.seekbar)
-    DiscreteSeekBar seekBar;
-
 
     // =============================== onCreate ===============================
+    // video 不能和 ColorActivity 的主题兼容，所以...
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        Dart.inject(this);
         setContentView(R.layout.activity_news_detail);
-        initToolbar(news.getTitle(), true);
+        ButterKnife.bind(this);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        atvToolbarTitle.setText(news.getTitle());
+        toolbar.setBackgroundColor(ColorOverrider.getInstance(this).getColorPrimary());
+
         initViews();
         LoginHelper.checkLoginTime();
     }
 
-    private void initViews() {
 
-        initSeekBar();
-        initWebView();
-        initFilterMenuLayout();
-        loadContent();
+    // =============================== onConfigurationChanged ===============================
+
+    @Override
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            toolbar.setVisibility(View.VISIBLE);
+            filterMenuLayout.setVisibility(View.VISIBLE);
+        }
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            toolbar.setVisibility(View.GONE);
+            filterMenuLayout.setVisibility(View.GONE);
+        }
     }
 
-    private void initSeekBar() {
 
-        seekBar.setVisibility(View.GONE);
-        seekBar.setProgress(getTextZoom());
-        seekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+    // =============================== initViews ===============================
+
+    private void initViews() {
+        initVideoView();
+        initWebView();
+        loadNewData();
+        initFilterMenuLayout();
+    }
+
+    private void initVideoView() {
+        if (news.getHasVideo() == 0) {
+            jjVideoRelativeLayout.setVisibility(View.GONE);
+            return;
+        }
+
+        videoView.setMediaController(new VideoJjMediaContoller(this, true));
+        videoView.setMediaBufferingView(avLoadingIndicatorView);
+        videoView.setOnJjOpenSuccess(new OnJjOpenSuccessListener() {
+
             @Override
-            public void onProgressChanged(DiscreteSeekBar discreteSeekBar, int i, boolean b) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(DiscreteSeekBar discreteSeekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(DiscreteSeekBar discreteSeekBar) {
-
-                int progress = discreteSeekBar.getProgress();
-                webView.getSettings().setTextZoom(progress);
-                saveTextZoom(progress);
+            public void onJjOpenSuccess() {
+                avLoadingIndicatorView.setVisibility(View.GONE);
             }
         });
-
+        String appKey = "EyvxCaZBe";
+        videoView.setVideoJjAppKey(appKey);
+        videoView.setVideoJjPageName("com.unicorn.csp");
+        videoView.setMediaCodecEnabled(true);// 是否开启 硬解 硬解对一些手机有限制
+        // 判断是否源 0 代表 8大视频网站url 1代表自己服务器的视频源 2代表直播地址 3代表本地视频(手机上的视频源),4特殊需求
+        videoView.setVideoJjType(news.getVideoType());
+        videoView.setResourceVideo(news.getVideoUrl());
     }
 
 
@@ -124,88 +164,13 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
         webSettings.setTextZoom(getTextZoom());
         webView.setWebViewClient(new WebViewClient());
         webView.setScrollViewCallbacks(this);
-        enableVideo();
-    }
-
-    private void enableVideo() {
-
-        View nonVideoLayout = findViewById(R.id.nonVideoLayout); // Your own view, read class comments
-        ViewGroup videoLayout = (ViewGroup) findViewById(R.id.videoLayout); // Your own view, read class comments
-        //noinspection all
-        View loadingView = getLayoutInflater().inflate(R.layout.view_loading_video, null); // Your own view, read class comments
-        webChromeClient = new VideoEnabledWebChromeClient(nonVideoLayout, videoLayout, loadingView, webView) // See all available constructors...
-        {
-            // Subscribe to standard events, such as onProgressChanged()...
-            @Override
-            public void onProgressChanged(WebView view, int progress) {
-
-            }
-        };
-        webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
-            @Override
-            public void toggledFullscreen(boolean fullscreen) {
-                // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
-                if (fullscreen) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    WindowManager.LayoutParams attrs = getWindow().getAttributes();
-                    attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-                    attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-                    getWindow().setAttributes(attrs);
-                    if (android.os.Build.VERSION.SDK_INT >= 14) {
-                        //noinspection all
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-                    }
-                } else {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    WindowManager.LayoutParams attrs = getWindow().getAttributes();
-                    attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
-                    attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-                    getWindow().setAttributes(attrs);
-                    if (android.os.Build.VERSION.SDK_INT >= 14) {
-                        //noinspection all
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-                    }
-                }
-
-            }
-        });
-        webView.setWebChromeClient(webChromeClient);
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Notify the VideoEnabledWebChromeClient, and handle it ourselves if it doesn't handle it
-        if (!webChromeClient.onBackPressed()) {
-            if (webView.canGoBack()) {
-                webView.goBack();
-            } else {
-                // Standard back button implementation (for example this could close the app)
-                super.onBackPressed();
-            }
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (webView != null) {
-            webView.destroy();
-        }
-    }
-
-    @Override
-    public void finish() {
-        ViewGroup view = (ViewGroup) getWindow().getDecorView();
-        view.removeAllViews();
-        super.finish();
     }
 
 
-    // =============================== loadContent ===============================
+    // =============================== loadNewData ===============================
 
-    private void loadContent() {
-
-        MyVolley.addRequest(new StringRequest(getUrl(),
+    private void loadNewData() {
+        MyVolley.addRequest(new StringRequest(getNewDataUrl(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -215,8 +180,7 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
                 MyVolley.getDefaultErrorListener()));
     }
 
-    private String getUrl() {
-
+    private String getNewDataUrl() {
         Uri.Builder builder = Uri.parse(ConfigUtils.getBaseUrl() + "/api/v1/news/newsData?").buildUpon();
         builder.appendQueryParameter("userId", ConfigUtils.getUserId());
         builder.appendQueryParameter("newsId", news.getId());
@@ -227,14 +191,13 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
     // =============================== initFilterMenuLayout ===============================
 
     private void initFilterMenuLayout() {
-
         int darkerColor = (int) new ArgbEvaluator().evaluate(0.7f, Color.parseColor("#000000"), ColorOverrider.getInstance(this).getColorAccent());
         filterMenuLayout.setPrimaryDarkColor(darkerColor);
+        filterMenuLayout.setPrimaryColor(ColorOverrider.getInstance(this).getColorPrimary());
         attachMenu(filterMenuLayout);
     }
 
     private FilterMenu attachMenu(FilterMenuLayout layout) {
-
         // 添加评论，查看评论，点赞，关注
         return new FilterMenu.Builder(this)
                 .addItem(getIconDrawable(Iconify.IconValue.zmdi_star, 28))
@@ -297,7 +260,6 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-
         if (scrollState == ScrollState.UP) {
             filterMenuLayout.setVisibility(View.GONE);
         } else if (scrollState == ScrollState.DOWN) {
@@ -378,6 +340,7 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
         startActivity(intent);
     }
 
+
     // =============================== textZoom ===============================
 
     private String SF_TEXT_ZOOM = "text_zoom";
@@ -399,14 +362,12 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
 
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
-
         getMenuInflater().inflate(R.menu.news_detail, menu);
         menu.findItem(R.id.font).setIcon(getActionDrawable());
         return super.onCreateOptionsMenu(menu);
     }
 
     private Drawable getActionDrawable() {
-
         return new IconDrawable(this, Iconify.IconValue.zmdi_font)
                 .colorRes(android.R.color.white)
                 .actionBarSize();
@@ -414,13 +375,47 @@ public class NewsDetailActivity extends ToolbarActivity implements ObservableScr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (seekBar.getVisibility() == View.GONE) {
-            seekBar.setVisibility(View.VISIBLE);
-        } else {
-            seekBar.setVisibility(View.GONE);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        if (item.getItemId() == R.id.font) {
+            showFontAdjustDialog();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showFontAdjustDialog() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .customView(R.layout.dialog_font_adjust, true)
+                .show();
+        if (dialog.getCustomView() != null) {
+            DiscreteSeekBar seekBar = (DiscreteSeekBar) dialog.getCustomView().findViewById(R.id.seekbar);
+            initSeekBar(seekBar);
+        }
+    }
+
+    private void initSeekBar(DiscreteSeekBar seekBar) {
+        seekBar.setProgress(getTextZoom());
+        seekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+            @Override
+            public void onProgressChanged(DiscreteSeekBar discreteSeekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+                int progress = discreteSeekBar.getProgress();
+                webView.getSettings().setTextZoom(progress);
+                saveTextZoom(progress);
+            }
+        });
     }
 
 }

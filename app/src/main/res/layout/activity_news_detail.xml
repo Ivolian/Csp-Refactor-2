@@ -9,17 +9,28 @@
         android:background="@color/background_material_light"
         android:orientation="vertical">
 
-        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-            android:id="@+id/seekbar"
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            app:dsb_max="140"
-            app:dsb_min="60" />
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/atv_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@android:color/white"
+                android:textSize="19sp" />
+
+        </android.support.v7.widget.Toolbar>
 
         <cn.com.video.venvy.param.JjVideoRelativeLayout
+            android:id="@+id/videoLayout"
             android:layout_width="match_parent"
             android:layout_height="250dp">
 
@@ -42,15 +53,12 @@
         </cn.com.video.venvy.param.JjVideoRelativeLayout>
 
         <com.github.ksoichiro.android.observablescrollview.ObservableWebView
-            android:visibility="gone"
             android:id="@+id/webview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
     </LinearLayout>
-
-    <include layout="@layout/toolbar_with_shadow" />
 
     <com.linroid.filtermenu.library.FilterMenuLayout
         android:id="@+id/filter_menu_layout"
@@ -59,9 +67,7 @@
         app:fm_centerBottom="100dp"
         app:fm_centerRight="48dp"
         app:fm_collapsedRadius="24dp"
-        app:fm_expandedRadius="96dp"
-        app:fm_primaryColor="?attr/colorAccent" />
-
+        app:fm_expandedRadius="96dp" />
 
 </FrameLayout>
 
