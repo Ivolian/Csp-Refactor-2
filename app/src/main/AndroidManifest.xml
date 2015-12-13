@@ -52,10 +52,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.news.NewsDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:screenOrientation="portrait"
-            android:hardwareAccelerated="true"
-            android:theme="@style/NewDetail" />
+            android:theme="@style/NewDetail"
+            />
         <activity
             android:name=".activity.news.CommentActivity"
             android:launchMode="singleTask"
