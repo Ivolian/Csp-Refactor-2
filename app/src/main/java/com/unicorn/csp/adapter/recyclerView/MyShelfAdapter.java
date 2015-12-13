@@ -69,6 +69,9 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
         @Bind(R.id.tv_event_time)
         TextView tvEventTime;
 
+        @Bind(R.id.tv_comment_count)
+        TextView tvCommentCount;
+
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -179,6 +182,7 @@ public class MyShelfAdapter extends RecyclerView.Adapter<MyShelfAdapter.ViewHold
         final com.unicorn.csp.model.Book book = bookList.get(position);
         viewHolder.tvBookName.setText(book.getName());
         viewHolder.tvEventTime.setText(DateUtils.getFormatDateString(book.getEventTime(), new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)));
+        viewHolder.tvCommentCount.setText("评论 " + book.getCommentCount());
 
         BookHelper.getBookReadingProgress(book);
         int percent = book.getDenominator() != 0 ? book.getNumerator() * 100 / book.getDenominator() : 0;

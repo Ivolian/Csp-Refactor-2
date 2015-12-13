@@ -21,6 +21,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
+import com.unicorn.csp.activity.news.BookCommentActivity;
 import com.unicorn.csp.model.BookHelper;
 import com.unicorn.csp.other.LoginHelper;
 import com.unicorn.csp.other.PdfHelper;
@@ -73,6 +74,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
         @Bind(R.id.tv_event_time)
         TextView tvEventTime;
+
+        @Bind(R.id.tv_comment_count)
+        TextView tvCommentCount;
+
+
 
         ViewHolder(View view) {
             super(view);
@@ -239,6 +245,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         final com.unicorn.csp.model.Book book = bookList.get(position);
         viewHolder.tvBookName.setText(book.getName());
         viewHolder.tvEventTime.setText(DateUtils.getFormatDateString(book.getEventTime(), new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)));
+        viewHolder.tvCommentCount.setText("评论 " + book.getCommentCount());
 
         BookHelper.getBookReadingProgress(book);
         int percent = book.getDenominator() != 0 ? book.getNumerator() * 100 / book.getDenominator() : 0;
@@ -280,6 +287,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                                 } else {
                                     ToastUtils.show("该书籍尚未缓存");
                                 }
+
+                                return true;
+                            case R.id.comment:
+                                Intent intent = new Intent(activity, BookCommentActivity.class);
+                                intent.putExtra("bookId", book.getId());
+                                activity.startActivity(intent);
                                 return true;
                         }
                         return false;

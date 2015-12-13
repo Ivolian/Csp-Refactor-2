@@ -26,6 +26,8 @@ public class Book implements Serializable {
 
     private Integer denominator;
 
+    private Integer commentCount;
+
     public Book() {
     }
 
@@ -118,6 +120,14 @@ public class Book implements Serializable {
 
     public void setEventTime(Date eventTime) {
         this.eventTime = eventTime;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 }
 

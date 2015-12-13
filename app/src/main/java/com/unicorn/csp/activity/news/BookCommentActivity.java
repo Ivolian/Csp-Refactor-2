@@ -1,23 +1,26 @@
-package com.unicorn.csp.fragment;
+package com.unicorn.csp.activity.news;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.f2prateek.dart.InjectExtra;
+import com.malinskiy.materialicons.IconDrawable;
+import com.malinskiy.materialicons.Iconify;
+import com.melnykov.fab.FloatingActionButton;
+import com.r0adkll.slidr.model.SlidrConfig;
 import com.unicorn.csp.R;
-import com.unicorn.csp.adapter.recyclerView.BookAdapter;
-import com.unicorn.csp.fragment.base.LazyLoadFragment;
-import com.unicorn.csp.greendao.Menu;
-import com.unicorn.csp.model.Book;
+import com.unicorn.csp.activity.base.ToolbarActivity;
+import com.unicorn.csp.adapter.recyclerView.CommentAdapter;
+import com.unicorn.csp.model.Comment;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.JSONUtils;
@@ -25,6 +28,7 @@ import com.unicorn.csp.utils.RecycleViewUtils;
 import com.unicorn.csp.utils.ToastUtils;
 import com.unicorn.csp.volley.MyVolley;
 import com.unicorn.csp.volley.toolbox.VolleyErrorHelper;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,14 +38,10 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 
-public class BookFragment extends LazyLoadFragment {
-
-    @Override
-    public int getLayoutResId() {
-        return R.layout.fragment_refresh_recycleview;
-    }
+public class BookCommentActivity extends ToolbarActivity {
 
 
     // ==================== views ====================
@@ -52,10 +52,19 @@ public class BookFragment extends LazyLoadFragment {
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
-    // ==================== bookAdapter ====================
 
-    BookAdapter bookAdapter;
+    // ==================== 必要参数 ====================
+
+    @InjectExtra("bookId")
+    String bookId;
+
+
+    // ==================== commentAdapter ====================
+
+    CommentAdapter commentAdapter;
 
 
     // ==================== page data ====================
@@ -69,16 +78,15 @@ public class BookFragment extends LazyLoadFragment {
     boolean lastPage;
 
 
-    // ==================== onCreateView ====================
+    // ==================== onCreate ====================
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
 
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onFirstUserVisible() {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_comment);
+        initToolbar("评论", true);
+        enableSlidr();
 
         initViews();
     }
@@ -87,12 +95,13 @@ public class BookFragment extends LazyLoadFragment {
 
         initSwipeRefreshLayout();
         initRecyclerView();
+        initFab();
         reload();
     }
 
     private void initSwipeRefreshLayout() {
 
-        swipeRefreshLayout.setColorSchemeColors(ColorOverrider.getInstance(getActivity()).getColorAccent());
+        swipeRefreshLayout.setColorSchemeColors(ColorOverrider.getInstance(this).getColorAccent());
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -104,9 +113,9 @@ public class BookFragment extends LazyLoadFragment {
     private void initRecyclerView() {
 
         recyclerView.setHasFixedSize(true);
-        final LinearLayoutManager linearLayoutManager = RecycleViewUtils.getLinearLayoutManager(getActivity());
+        final LinearLayoutManager linearLayoutManager = RecycleViewUtils.getLinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(bookAdapter = new BookAdapter(getActivity()));
+        recyclerView.setAdapter(commentAdapter = new CommentAdapter());
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -127,6 +136,75 @@ public class BookFragment extends LazyLoadFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             }
         });
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
+    }
+
+    private void initFab() {
+
+        fab.setImageDrawable(getFabDrawable());
+        fab.attachToRecyclerView(recyclerView);
+    }
+
+    private Drawable getFabDrawable() {
+
+        return new IconDrawable(this, Iconify.IconValue.zmdi_comment_text_alt)
+                .colorRes(android.R.color.white)
+                .actionBarSize();
+    }
+
+
+    // ==================== onNewIntent ====================
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+
+        super.onNewIntent(intent);
+        reload();
+    }
+
+
+    // ==================== 发表评论点击事件 ====================
+
+    @OnClick(R.id.fab)
+    public void onFabClick() {
+
+        startAddCommentActivity();
+    }
+
+    private void startAddCommentActivity() {
+
+        Intent intent = new Intent(this, AddBookCommentActivity.class);
+        intent.putExtra("bookId", bookId);
+        startActivity(intent);
+
+        SlidrConfig config = new SlidrConfig.Builder()
+                .edge(true)
+                .build();
+    }
+
+
+
+    private String getUrl(Integer pageNo) {
+
+        Uri.Builder builder = Uri.parse(ConfigUtils.getBaseUrl() + "/api/v1/bookComment/listForMobile?").buildUpon();
+        builder.appendQueryParameter("pageNo", pageNo.toString());
+        builder.appendQueryParameter("pageSize", PAGE_SIZE.toString());
+        builder.appendQueryParameter("bookId", bookId);
+        return builder.toString();
+    }
+
+    private List<Comment> parseCommentList(JSONObject response) {
+
+        JSONArray commentJSONArray = JSONUtils.getJSONArray(response, "content", null);
+        List<Comment> commentList = new ArrayList<>();
+        for (int i = 0; i != commentJSONArray.length(); i++) {
+            JSONObject commentJSONObject = JSONUtils.getJSONObject(commentJSONArray, i);
+            String displayName = JSONUtils.getString(commentJSONObject, "displayName", "");
+            Date eventTime = new Date(JSONUtils.getLong(commentJSONObject, "eventtime", 0));
+            String content = JSONUtils.getString(commentJSONObject, "content", "");
+            commentList.add(new Comment(displayName, eventTime, content));
+        }
+        return commentList;
     }
 
     public void reload() {
@@ -135,7 +213,7 @@ public class BookFragment extends LazyLoadFragment {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                startRefreshing();
+                swipeRefreshLayout.setRefreshing(true);
             }
         });
         MyVolley.addRequest(new JsonObjectRequest(getUrl(pageNo),
@@ -143,8 +221,8 @@ public class BookFragment extends LazyLoadFragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         stopRefreshing();
-                        bookAdapter.setBookList(parseBookList(response));
-                        bookAdapter.notifyDataSetChanged();
+                        commentAdapter.setCommentList(parseCommentList(response));
+                        commentAdapter.notifyDataSetChanged();
                         checkLastPage(response);
                     }
                 },
@@ -166,8 +244,8 @@ public class BookFragment extends LazyLoadFragment {
                     public void onResponse(JSONObject response) {
                         loadingMore = false;
                         pageNo++;
-                        bookAdapter.getBookList().addAll(parseBookList(response));
-                        bookAdapter.notifyDataSetChanged();
+                        commentAdapter.getCommentList().addAll(parseCommentList(response));
+                        commentAdapter.notifyDataSetChanged();
                         checkLastPage(response);
                     }
                 },
@@ -180,52 +258,10 @@ public class BookFragment extends LazyLoadFragment {
                 }));
     }
 
-
-    // ========================== 基础方法 ==========================
-
     private void clearPageData() {
 
         pageNo = 1;
         lastPage = false;
-    }
-
-    private String getUrl(Integer pageNo) {
-
-        Uri.Builder builder = Uri.parse(ConfigUtils.getBaseUrl() + "/api/v1/book/listForMobile?").buildUpon();
-        builder.appendQueryParameter("pageNo", pageNo.toString());
-        builder.appendQueryParameter("pageSize", PAGE_SIZE.toString());
-
-        Menu menu = (Menu) getArguments().getSerializable("menu");
-        builder.appendQueryParameter("menuId", menu == null ? "" : menu.getId());
-        String keyword = getArguments().getString("keyword");
-        builder.appendQueryParameter("keyword", keyword == null ? "" : keyword);
-
-        return builder.toString();
-    }
-
-    private List<Book> parseBookList(JSONObject response) {
-
-        JSONArray bookJSONArray = JSONUtils.getJSONArray(response, "content", null);
-        List<Book> bookList = new ArrayList<>();
-        for (int i = 0; i != bookJSONArray.length(); i++) {
-            JSONObject bookJSONObject = JSONUtils.getJSONObject(bookJSONArray, i);
-            Integer orderNo = JSONUtils.getInt(bookJSONObject, "orderNo", 0);
-            String name = JSONUtils.getString(bookJSONObject, "name", "");
-            String picture = JSONUtils.getString(bookJSONObject, "picture", "");
-            String ebook = JSONUtils.getString(bookJSONObject, "ebook", "");
-            String ebookFilename = JSONUtils.getString(bookJSONObject, "ebookFilename", "");
-            String summary = JSONUtils.getString(bookJSONObject, "summary", "");
-            String id = JSONUtils.getString(bookJSONObject, "id", "");
-            Date eventTime = new Date(JSONUtils.getLong(bookJSONObject, "eventTime", 0));
-            Book book = new Book(orderNo, name, picture, ebook, ebookFilename, summary, id,eventTime);
-
-            int commentCount = JSONUtils.getInt(bookJSONObject, "commentCount", 0);
-            book.setCommentCount(commentCount);
-
-
-            bookList.add(book);
-        }
-        return bookList;
     }
 
     private void checkLastPage(JSONObject response) {
@@ -249,13 +285,6 @@ public class BookFragment extends LazyLoadFragment {
 
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    private void startRefreshing() {
-
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setRefreshing(true);
         }
     }
 

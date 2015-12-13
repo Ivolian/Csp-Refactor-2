@@ -64,6 +64,13 @@
             android:name=".activity.news.AddCommentActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.news.BookCommentActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.news.AddBookCommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.search.NewsSearchActivity"
             android:screenOrientation="portrait" />
         <activity
