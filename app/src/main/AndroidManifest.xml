@@ -30,6 +30,12 @@
         tools:replace="android:icon,android:name,android:label">
 
         <activity android:name=".activity.main.SplashActivity">
+
+        </activity>
+        <activity
+            android:name=".home.HomeActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -54,8 +60,7 @@
             android:name=".activity.news.NewsDetailActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:screenOrientation="portrait"
-            android:theme="@style/NewDetail"
-            />
+            android:theme="@style/NewDetail" />
         <activity
             android:name=".activity.news.CommentActivity"
             android:launchMode="singleTask"

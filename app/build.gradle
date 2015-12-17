@@ -75,4 +75,5 @@ dependencies {
     compile(name: 'video', ext: 'aar')
     compile 'com.wang.avi:library:1.0.1'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.flyco.banner:FlycoBanner_Lib:1.2.0@aar'
 }
