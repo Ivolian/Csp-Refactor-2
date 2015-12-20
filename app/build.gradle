@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId "com.unicorn.csp"
         minSdkVersion 14
@@ -76,4 +76,5 @@ dependencies {
     compile 'com.wang.avi:library:1.0.1'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.flyco.banner:FlycoBanner_Lib:1.2.0@aar'
+    compile(name: 'CardStack', ext: 'aar')
 }
