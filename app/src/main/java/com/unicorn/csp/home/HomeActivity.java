@@ -8,7 +8,6 @@ import com.flyco.banner.anim.select.ZoomInEnter;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
-import com.unicorn.csp.utils.ToastUtils;
 import com.wenchao.cardstack.CardStack;
 
 import butterknife.Bind;
@@ -25,9 +24,8 @@ public class HomeActivity extends ToolbarActivity {
     @Bind(R.id.sib_anim)
     SimpleImageBanner simpleImageBanner;
 
-@Bind(R.id.cardStack)
- CardStack mCardStack;
-
+    @Bind(R.id.cardStack)
+    CardStack mCardStack;
 
 
     @Override
@@ -36,11 +34,11 @@ public class HomeActivity extends ToolbarActivity {
         setContentView(R.layout.activity_home);
         initToolbar("首页", false);
 
-        GradientDrawable gradientDrawable =(GradientDrawable)view.getBackground();
+        GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
         gradientDrawable.setColor(ColorOverrider.getInstance(this).getColorPrimary());
 
 
-        GradientDrawable gradientDrawable1 =(GradientDrawable)view1.getBackground();
+        GradientDrawable gradientDrawable1 = (GradientDrawable) view1.getBackground();
         gradientDrawable1.setColor(ColorOverrider.getInstance(this).getColorPrimary());
 
         simpleImageBanner
@@ -56,8 +54,8 @@ public class HomeActivity extends ToolbarActivity {
 //        });
 
         mCardStack.setContentResource(R.layout.card_content);
-        mCardStack.setStackMargin(20);
-        final CardsDataAdapter mCardAdapter = new CardsDataAdapter(getApplicationContext(),0);
+
+        final CardsDataAdapter mCardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
         mCardAdapter.add("test1");
         mCardAdapter.add("test2");
         mCardAdapter.add("test3");
@@ -68,24 +66,35 @@ public class HomeActivity extends ToolbarActivity {
         mCardStack.setListener(new CardStack.CardEventListener() {
             @Override
             public boolean swipeEnd(int i, float v) {
-
+                if (i == 0 || i == 1)
+                    return false;
                 return true;
             }
 
             @Override
             public boolean swipeStart(int i, float v) {
+
+                if (i == 0 || i == 1)
+                    return false;
+
+//                ToastUtils.show(""+i);
+
                 return true;
             }
 
             @Override
             public boolean swipeContinue(int i, float v, float v1) {
+
+                if (i == 0 || i == 1)
+                    return false;
+
                 return true;
             }
 
             @Override
             public void discarded(int i, int i1) {
-                ToastUtils.show(i+"");
-                if (i==5){
+//                ToastUtils.show(i+"");
+                if (i == 5) {
                     mCardStack.reset(true);
                 }
             }
@@ -97,13 +106,6 @@ public class HomeActivity extends ToolbarActivity {
 
 
     }
-
-
-
-
-
-
-
 
 
 }

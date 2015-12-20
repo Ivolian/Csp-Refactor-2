@@ -77,4 +77,5 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.flyco.banner:FlycoBanner_Lib:1.2.0@aar'
     compile(name: 'CardStack', ext: 'aar')
+    compile(name: 'label', ext: 'aar')
 }

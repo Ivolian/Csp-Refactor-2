@@ -1,12 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-    />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <me.corer.labelview.LabelView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:backgroundColor="?attr/colorPrimary"
+                app:direction="leftTop"
+                app:labelTopPadding="10dp"
+                app:num="01"
+                app:numSize="20dp"
+                app:numStyle="bold"
+                app:text="TOP"
+                app:textSize="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="这是标题，这是标题 这是标题，这是标题 这是标题，这是标题 这是标题，这是标题 "
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:maxLines="7"
+            android:ellipsize="end"
+            android:text="\t\t\t\t领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
 
 </android.support.v7.widget.CardView>
