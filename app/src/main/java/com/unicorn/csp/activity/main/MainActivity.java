@@ -73,11 +73,10 @@ public class MainActivity extends ToolbarActivity {
 
         if (savedInstanceState == null) {
             selectBottomTab(0, true);
+            startActivity(HomeActivity.class);
         } else {
             selectBottomTab(savedInstanceState.getInt(SELECTED), false);
         }
-
-        startActivity(HomeActivity.class);
     }
 
     private void initViews() {
@@ -102,6 +101,7 @@ public class MainActivity extends ToolbarActivity {
                 .withHeaderDivider(true)
                 .withCloseOnClick(false)
                 .addDrawerItems(
+                        new PrimaryDrawerItem().withName("首页").withIcon(FontAwesome.Icon.faw_home).withIdentifier(0).withCheckable(false),
                         new PrimaryDrawerItem().withName("我的关注").withIcon(FontAwesome.Icon.faw_star).withIdentifier(1).withCheckable(false),
                         new PrimaryDrawerItem().withName("互动专区").withIcon(FontAwesome.Icon.faw_group).withIdentifier(2).withCheckable(false),
                         new PrimaryDrawerItem().withName("主题色彩").withIcon(FontAwesome.Icon.faw_paint_brush).withIdentifier(3).withCheckable(false),
@@ -119,6 +119,9 @@ public class MainActivity extends ToolbarActivity {
                     @Override
                     public boolean onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
                         switch (drawerItem.getIdentifier()) {
+                            case 0:
+                                startActivity(HomeActivity.class);
+                                break;
                             case 1:
                                 startActivity(FavoriteNewsActivity.class);
 //                                startActivity(DbInspectorActivity.class);
@@ -145,7 +148,7 @@ public class MainActivity extends ToolbarActivity {
 
     private void initDrawerHeader(View header) {
 
-        UserInfo userInfo = (UserInfo)getIntent().getSerializableExtra("userInfo");
+        UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("userInfo");
         TextView tvThumbCount = (TextView) header.findViewById(R.id.tv_thumb_count);
         tvThumbCount.setText("本月点赞: " + userInfo.getThumbCount());
         TextView tvFavoriteNewsCount = (TextView) header.findViewById(R.id.tv_favorite_news_count);

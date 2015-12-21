@@ -1,5 +1,6 @@
 package com.unicorn.csp.home;
 
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.flyco.banner.anim.select.ZoomInEnter;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
+import com.unicorn.csp.activity.news.NewsDetailActivity;
+import com.unicorn.csp.model.News;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.JSONUtils;
@@ -19,48 +22,36 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 
 
 public class HomeActivity extends ToolbarActivity {
 
-    @Bind(R.id.shape)
-    View view;
-
-    @Bind(R.id.shape1)
-    View view1;
-
-    @Bind(R.id.sib_anim)
-    SimpleImageBanner simpleImageBanner;
 
     @Bind(R.id.cardStack)
-    CardStack mCardStack;
+    CardStack cardStack;
 
+
+    // ========================== onCreate ==========================
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initToolbar("首页", true);
+        initViews();
         enableSlidr();
+    }
 
-        GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
-        gradientDrawable.setColor(ColorOverrider.getInstance(this).getColorPrimary());
+    private void initViews() {
+        initShape();
+        initBanner();
 
 
-        GradientDrawable gradientDrawable1 = (GradientDrawable) view1.getBackground();
-        gradientDrawable1.setColor(ColorOverrider.getInstance(this).getColorPrimary());
-
-fetchTopNews();
-//        simpleImageBanner.setOnItemClickL(new SimpleImageBanner.OnItemClickL() {
-//            @Override
-//            public void onItemClick(int position) {
-//               simpleImageBanner
-//            }
-//        });
-
-        mCardStack.setContentResource(R.layout.card_content);
+        cardStack.setContentResource(R.layout.card_content);
 
         final CardsDataAdapter mCardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
         mCardAdapter.add("test1");
@@ -68,9 +59,9 @@ fetchTopNews();
         mCardAdapter.add("test3");
         mCardAdapter.add("test4");
         mCardAdapter.add("test5");
-        mCardStack.setAdapter(mCardAdapter);
+        cardStack.setAdapter(mCardAdapter);
 
-        mCardStack.setListener(new CardStack.CardEventListener() {
+        cardStack.setListener(new CardStack.CardEventListener() {
             @Override
             public boolean swipeEnd(int i, float v) {
                 if (i == 0 || i == 1)
@@ -102,7 +93,7 @@ fetchTopNews();
             public void discarded(int i, int i1) {
 //                ToastUtils.show(i+"");
                 if (i == 5) {
-                    mCardStack.reset(true);
+                    cardStack.reset(true);
                 }
             }
 
@@ -111,9 +102,36 @@ fetchTopNews();
             }
         });
 
-
     }
 
+
+    // ========================== shape ==========================
+
+    @Bind(R.id.shape)
+    View view;
+
+    @Bind(R.id.shape1)
+    View view1;
+
+    private void initShape() {
+        GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
+        int colorPrimary = ColorOverrider.getInstance(this).getColorPrimary();
+        gradientDrawable.setColor(colorPrimary);
+        gradientDrawable = (GradientDrawable) view1.getBackground();
+        gradientDrawable.setColor(colorPrimary);
+    }
+
+
+    // ========================== initBanner ==========================
+
+    @Bind(R.id.banner)
+    SimpleImageBanner banner;
+
+    List<News> topNewsList;
+
+    private void initBanner() {
+        fetchTopNews();
+    }
 
     private void fetchTopNews() {
         String url = ConfigUtils.getBaseUrl() + "/api/v1/news/topList";
@@ -122,7 +140,7 @@ fetchTopNews();
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-            copeTopNewsResponse(response);
+                        copeTopNewsResponse(response);
                     }
                 },
                 MyVolley.getDefaultErrorListener()
@@ -130,24 +148,51 @@ fetchTopNews();
         MyVolley.addRequest(jsonArrayRequest);
     }
 
-    private void copeTopNewsResponse(JSONArray response){
+    private void copeTopNewsResponse(JSONArray response) {
+        topNewsList = parseTopNewsList(response);
+        banner.setSelectAnimClass(ZoomInEnter.class)
+                .setSource(topNewsList)
+                .startScroll();
+        banner.setOnItemClickL(new SimpleImageBanner.OnItemClickL() {
+            @Override
+            public void onItemClick(int position) {
+                startNewsDetailActivity(topNewsList.get(position));
+            }
+        });
+    }
 
+    private void startNewsDetailActivity(News news) {
+        Intent intent = new Intent(this, NewsDetailActivity.class);
+        intent.putExtra("news", news);
+        startActivity(intent);
+    }
 
-        ArrayList<BannerItem> list = new ArrayList<>();
+    private List<News> parseTopNewsList(JSONArray response) {
+        List<News> topNewsList = new ArrayList<>();
         for (int i = 0; i != response.length(); i++) {
-          JSONObject jsonObject = JSONUtils.getJSONObject(response,i);
-          String picture = JSONUtils.getString(jsonObject,"picture","");
-          String title = JSONUtils.getString(jsonObject,"title","");
-            BannerItem item = new BannerItem();
-            item.imgUrl = ConfigUtils.getBaseUrl() + picture;
-            item.title = title;
-            list.add(item);
-            simpleImageBanner
-                    .setSelectAnimClass(ZoomInEnter.class)
-                    .setSource(list)
-                    .startScroll();
-
+            JSONObject newsJSONObject = JSONUtils.getJSONObject(response, i);
+            String id = JSONUtils.getString(newsJSONObject, "id", "");
+            String picture = JSONUtils.getString(newsJSONObject, "picture", "");
+            String title = JSONUtils.getString(newsJSONObject, "title", "");
+            Date postTime = new Date(JSONUtils.getLong(newsJSONObject, "postTime", 0));
+            int commentCount = JSONUtils.getInt(newsJSONObject, "commentCount", 0);
+            int thumbCount = JSONUtils.getInt(newsJSONObject, "thumbCount", 0);
+            int hasVideo = JSONUtils.getInt(newsJSONObject, "hasVideo", 0);
+            int videoType = JSONUtils.getInt(newsJSONObject, "videoType", 0);
+            String videoUrl = JSONUtils.getString(newsJSONObject, "videoUrl", "");
+            News news = new News();
+            news.setId(id);
+            news.setTitle(title);
+            news.setPicture(picture);
+            news.setTime(postTime);
+            news.setCommentCount(commentCount);
+            news.setThumbCount(thumbCount);
+            news.setHasVideo(hasVideo);
+            news.setVideoType(videoType);
+            news.setVideoUrl(videoUrl);
+            topNewsList.add(news);
         }
+        return topNewsList;
     }
 
 
