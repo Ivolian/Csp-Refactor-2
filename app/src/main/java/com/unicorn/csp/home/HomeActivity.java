@@ -4,11 +4,21 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.flyco.banner.anim.select.ZoomInEnter;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
+import com.unicorn.csp.utils.ConfigUtils;
+import com.unicorn.csp.utils.JSONUtils;
+import com.unicorn.csp.volley.MyVolley;
 import com.wenchao.cardstack.CardStack;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 
@@ -32,7 +42,8 @@ public class HomeActivity extends ToolbarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        initToolbar("首页", false);
+        initToolbar("首页", true);
+        enableSlidr();
 
         GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
         gradientDrawable.setColor(ColorOverrider.getInstance(this).getColorPrimary());
@@ -41,15 +52,11 @@ public class HomeActivity extends ToolbarActivity {
         GradientDrawable gradientDrawable1 = (GradientDrawable) view1.getBackground();
         gradientDrawable1.setColor(ColorOverrider.getInstance(this).getColorPrimary());
 
-        simpleImageBanner
-                .setSelectAnimClass(ZoomInEnter.class)
-                .setSource(DataProvider.getList())
-                .startScroll();
-
-//        sib.setOnItemClickL(new SimpleImageBanner.OnItemClickL() {
+fetchTopNews();
+//        simpleImageBanner.setOnItemClickL(new SimpleImageBanner.OnItemClickL() {
 //            @Override
 //            public void onItemClick(int position) {
-//                T.showShort(context, "position--->" + position);
+//               simpleImageBanner
 //            }
 //        });
 
@@ -105,6 +112,42 @@ public class HomeActivity extends ToolbarActivity {
         });
 
 
+    }
+
+
+    private void fetchTopNews() {
+        String url = ConfigUtils.getBaseUrl() + "/api/v1/news/topList";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+            copeTopNewsResponse(response);
+                    }
+                },
+                MyVolley.getDefaultErrorListener()
+        );
+        MyVolley.addRequest(jsonArrayRequest);
+    }
+
+    private void copeTopNewsResponse(JSONArray response){
+
+
+        ArrayList<BannerItem> list = new ArrayList<>();
+        for (int i = 0; i != response.length(); i++) {
+          JSONObject jsonObject = JSONUtils.getJSONObject(response,i);
+          String picture = JSONUtils.getString(jsonObject,"picture","");
+          String title = JSONUtils.getString(jsonObject,"title","");
+            BannerItem item = new BannerItem();
+            item.imgUrl = ConfigUtils.getBaseUrl() + picture;
+            item.title = title;
+            list.add(item);
+            simpleImageBanner
+                    .setSelectAnimClass(ZoomInEnter.class)
+                    .setSource(list)
+                    .startScroll();
+
+        }
     }
 
 

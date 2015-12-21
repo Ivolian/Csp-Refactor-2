@@ -41,6 +41,8 @@ public class SimpleImageBanner extends BaseIndicaorBanner<BannerItem, SimpleImag
     @Override
     public View onCreateItemView(int position) {
         View inflate = View.inflate(context, R.layout.adapter_simple_image, null);
+
+
         NetworkImageView iv = (NetworkImageView)inflate.findViewById( R.id.iv);
 
         final BannerItem item = list.get(position);

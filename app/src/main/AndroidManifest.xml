@@ -30,16 +30,15 @@
         tools:replace="android:icon,android:name,android:label">
 
         <activity android:name=".activity.main.SplashActivity">
-
-        </activity>
-        <activity
-            android:name=".home.HomeActivity"
-            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity
+            android:name=".home.HomeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.main.LoginActivity"
             android:screenOrientation="portrait" />
