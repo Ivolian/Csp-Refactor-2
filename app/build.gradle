@@ -78,4 +78,5 @@ dependencies {
     compile 'com.flyco.banner:FlycoBanner_Lib:1.2.0@aar'
     compile(name: 'CardStack', ext: 'aar')
     compile(name: 'label', ext: 'aar')
+    compile 'org.ocpsoft.prettytime:prettytime:3.2.7.Final'
 }

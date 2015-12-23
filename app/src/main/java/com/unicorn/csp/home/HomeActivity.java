@@ -31,10 +31,6 @@ import butterknife.Bind;
 public class HomeActivity extends ToolbarActivity {
 
 
-    @Bind(R.id.cardStack)
-    CardStack cardStack;
-
-
     // ========================== onCreate ==========================
 
     @Override
@@ -49,59 +45,7 @@ public class HomeActivity extends ToolbarActivity {
     private void initViews() {
         initShape();
         initBanner();
-
-
-        cardStack.setContentResource(R.layout.card_content);
-
-        final CardsDataAdapter mCardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
-        mCardAdapter.add("test1");
-        mCardAdapter.add("test2");
-        mCardAdapter.add("test3");
-        mCardAdapter.add("test4");
-        mCardAdapter.add("test5");
-        cardStack.setAdapter(mCardAdapter);
-
-        cardStack.setListener(new CardStack.CardEventListener() {
-            @Override
-            public boolean swipeEnd(int i, float v) {
-                if (i == 0 || i == 1)
-                    return false;
-                return true;
-            }
-
-            @Override
-            public boolean swipeStart(int i, float v) {
-
-                if (i == 0 || i == 1)
-                    return false;
-
-//                ToastUtils.show(""+i);
-
-                return true;
-            }
-
-            @Override
-            public boolean swipeContinue(int i, float v, float v1) {
-
-                if (i == 0 || i == 1)
-                    return false;
-
-                return true;
-            }
-
-            @Override
-            public void discarded(int i, int i1) {
-//                ToastUtils.show(i+"");
-                if (i == 5) {
-                    cardStack.reset(true);
-                }
-            }
-
-            @Override
-            public void topCardTapped() {
-            }
-        });
-
+        initCardStack();
     }
 
 
@@ -122,7 +66,7 @@ public class HomeActivity extends ToolbarActivity {
     }
 
 
-    // ========================== initBanner ==========================
+    // ========================== banner ==========================
 
     @Bind(R.id.banner)
     SimpleImageBanner banner;
@@ -195,5 +139,49 @@ public class HomeActivity extends ToolbarActivity {
         return topNewsList;
     }
 
+
+    // ========================== card stack ==========================
+
+    @Bind(R.id.cardStack)
+    CardStack cardStack;
+
+    private void initCardStack() {
+        cardStack.setContentResource(R.layout.item_card_board);
+
+        final CardsDataAdapter mCardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
+        mCardAdapter.add("test1");
+        mCardAdapter.add("test2");
+        mCardAdapter.add("test3");
+        mCardAdapter.add("test4");
+        mCardAdapter.add("test5");
+        cardStack.setAdapter(mCardAdapter);
+        cardStack.setListener(new CardStack.CardEventListener() {
+            @Override
+            public boolean swipeEnd(int i, float v) {
+                return i == 2 || i == 3;
+            }
+
+            @Override
+            public boolean swipeStart(int i, float v) {
+                return i == 2 || i == 3;
+            }
+
+            @Override
+            public boolean swipeContinue(int i, float v, float v1) {
+                return i == 2 || i == 3;
+            }
+
+            @Override
+            public void discarded(int i, int i1) {
+                if (i == 5) {
+                    cardStack.reset(true);
+                }
+            }
+
+            @Override
+            public void topCardTapped() {
+            }
+        });
+    }
 
 }

@@ -15,6 +15,7 @@
             android:layout_height="60dp">
 
             <me.corer.labelview.LabelView
+                android:id="@+id/label"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 app:backgroundColor="?attr/colorPrimary"
@@ -23,12 +24,12 @@
                 app:num="01"
                 app:numSize="20dp"
                 app:numStyle="bold"
-                app:text="TOP"
+                app:text="公告"
                 app:textSize="10dp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="60dp"
                 android:layout_marginRight="60dp"
@@ -42,14 +43,23 @@
         </FrameLayout>
 
         <TextView
+            android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:padding="10dp"
-            android:maxLines="7"
             android:ellipsize="end"
-            android:text="\t\t\t\t领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。领导已经下令，即日开始攻打黑龙山。"
+            android:maxLines="6"
+            android:padding="10dp"
             android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="@color/md_brown_700"
+            android:paddingBottom="10dp"
+            android:paddingRight="10dp" />
 
     </LinearLayout>
 
