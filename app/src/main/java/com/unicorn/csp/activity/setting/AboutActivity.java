@@ -8,11 +8,14 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.cundong.utils.Constants;
+import com.cundong.utils.PatchUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.unicorn.csp.MyApplication;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
+import com.unicorn.csp.utils.ApkUtils;
 import com.unicorn.csp.utils.AppUtils;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.JSONUtils;
@@ -42,9 +45,14 @@ public class AboutActivity extends ToolbarActivity {
 
         initViews();
         checkUpdate();
+
+        System.loadLibrary("ApkPatchLibrary");
+        String oldApkSource = ApkUtils.getSourceApkPath(this, Constants.TEST_PACKAGENAME);
+        PatchUtils.patch(Constants.MY_OLD_APK_PATH, Constants.MY_NEW_APK_PATH, Constants.MY_PATCH_APK_PATH);
+
     }
 
-    private void initViews(){
+    private void initViews() {
 
         tvVersionName.setText(AppUtils.getVersionName());
     }
@@ -62,7 +70,7 @@ public class AboutActivity extends ToolbarActivity {
                         if (needUpdate) {
                             String apk = JSONUtils.getString(response, "apk", "");
                             showConfirmUpdateDialog(apk);
-                        }else {
+                        } else {
                             ToastUtils.show("已经是最新版本");
                         }
                     }
@@ -78,8 +86,6 @@ public class AboutActivity extends ToolbarActivity {
     }
 
     private MaterialDialog showConfirmUpdateDialog(final String apk) {
-
-        // todo 添加更新细节
         return new MaterialDialog.Builder(this)
                 .title("检测到新版本，是否立即更新？")
                 .cancelable(false)
@@ -144,6 +150,7 @@ public class AboutActivity extends ToolbarActivity {
         } catch (Exception e) {
             //
         }
+
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(apk), "application/vnd.android.package-archive");
