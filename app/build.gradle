@@ -79,4 +79,5 @@ dependencies {
     compile(name: 'CardStack', ext: 'aar')
     compile(name: 'label', ext: 'aar')
     compile 'org.ocpsoft.prettytime:prettytime:3.2.7.Final'
+    compile 'com.google.code.gson:gson:2.4'
 }

@@ -28,6 +28,7 @@
                 app:textSize="10dp" />
 
             <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
@@ -36,7 +37,6 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="2"
-                android:text="这是标题，这是标题 这是标题，这是标题 这是标题，这是标题 这是标题，这是标题 "
                 android:textColor="@color/black"
                 android:textSize="18dp" />
 
@@ -53,7 +53,7 @@
             android:textSize="15dp" />
 
         <TextView
-            android:id="@+id/tv_time"
+            android:id="@+id/tv_event_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"

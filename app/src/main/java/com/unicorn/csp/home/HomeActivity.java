@@ -12,8 +12,10 @@ import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
 import com.unicorn.csp.activity.news.NewsDetailActivity;
 import com.unicorn.csp.model.News;
+import com.unicorn.csp.model.Notice;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.utils.ConfigUtils;
+import com.unicorn.csp.utils.GsonUtils;
 import com.unicorn.csp.utils.JSONUtils;
 import com.unicorn.csp.volley.MyVolley;
 import com.wenchao.cardstack.CardStack;
@@ -145,16 +147,11 @@ public class HomeActivity extends ToolbarActivity {
     @Bind(R.id.cardStack)
     CardStack cardStack;
 
-    private void initCardStack() {
-        cardStack.setContentResource(R.layout.item_card_board);
+    int topNoticesSize = -1;
 
-        final CardsDataAdapter mCardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
-        mCardAdapter.add("test1");
-        mCardAdapter.add("test2");
-        mCardAdapter.add("test3");
-        mCardAdapter.add("test4");
-        mCardAdapter.add("test5");
-        cardStack.setAdapter(mCardAdapter);
+    private void initCardStack() {
+        fetchTopNotices();
+        cardStack.setContentResource(R.layout.item_card_board);
         cardStack.setListener(new CardStack.CardEventListener() {
             @Override
             public boolean swipeEnd(int i, float v) {
@@ -173,7 +170,7 @@ public class HomeActivity extends ToolbarActivity {
 
             @Override
             public void discarded(int i, int i1) {
-                if (i == 5) {
+                if (i == topNoticesSize) {
                     cardStack.reset(true);
                 }
             }
@@ -182,6 +179,29 @@ public class HomeActivity extends ToolbarActivity {
             public void topCardTapped() {
             }
         });
+    }
+
+    private void fetchTopNotices() {
+        String url = ConfigUtils.getBaseUrl() + "/api/v1/notice/topList";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        copeTopNoticesResponse(response);
+                    }
+                },
+                MyVolley.getDefaultErrorListener()
+        );
+        MyVolley.addRequest(jsonArrayRequest);
+    }
+
+    private void copeTopNoticesResponse(JSONArray response) {
+        final CardsDataAdapter mCardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
+        List<Notice> topNoticeList = GsonUtils.parseNoticeList(response.toString());
+        topNoticesSize = topNoticeList.size();
+        mCardAdapter.addAll(topNoticeList);
+        cardStack.setAdapter(mCardAdapter);
     }
 
 }
