@@ -80,4 +80,5 @@ dependencies {
     compile(name: 'label', ext: 'aar')
     compile 'org.ocpsoft.prettytime:prettytime:3.2.7.Final'
     compile 'com.google.code.gson:gson:2.4'
+    compile 'com.github.deano2390:MaterialShowcaseView:1.0.5'
 }

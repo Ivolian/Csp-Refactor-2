@@ -27,12 +27,11 @@ public class CardsDataAdapter extends ArrayAdapter<Notice> {
         LabelView labelView = (LabelView) contentView.findViewById(R.id.label);
         labelView.setNum(position + 1 + "");
 
-        Notice notice = getItem(position);
+        final Notice notice = getItem(position);
         TextView tvTitle = (TextView) contentView.findViewById(R.id.tv_title);
         tvTitle.setText(notice.getTitle());
         TextView tvContent = (TextView) contentView.findViewById(R.id.tv_content);
-        String content = "\t\t\t\t" + notice.getContent();
-        tvContent.setText(content);
+        tvContent.setText(notice.getContent());
         TextView tvEventTime = (TextView) contentView.findViewById(R.id.tv_event_time);
         PrettyTime prettyTime = new PrettyTime();
         tvEventTime.setText(prettyTime.format(new Date(notice.getEventTime())));

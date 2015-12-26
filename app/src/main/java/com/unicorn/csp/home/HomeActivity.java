@@ -1,13 +1,19 @@
 package com.unicorn.csp.home;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.flyco.banner.anim.select.ZoomInEnter;
+import com.malinskiy.materialicons.IconDrawable;
+import com.malinskiy.materialicons.Iconify;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
 import com.unicorn.csp.activity.news.NewsDetailActivity;
@@ -28,6 +34,8 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 
 public class HomeActivity extends ToolbarActivity {
@@ -95,6 +103,9 @@ public class HomeActivity extends ToolbarActivity {
     }
 
     private void copeTopNewsResponse(JSONArray response) {
+        if (response.toString().equals("")) {
+            return;
+        }
         topNewsList = parseTopNewsList(response);
         banner.setSelectAnimClass(ZoomInEnter.class)
                 .setSource(topNewsList)
@@ -147,11 +158,15 @@ public class HomeActivity extends ToolbarActivity {
     @Bind(R.id.cardStack)
     CardStack cardStack;
 
-    int topNoticesSize = -1;
+    List<Notice> topNoticeList;
 
     private void initCardStack() {
-        fetchTopNotices();
         cardStack.setContentResource(R.layout.item_card_board);
+        addCardStackListener();
+        fetchTopNotices();
+    }
+
+    private void addCardStackListener() {
         cardStack.setListener(new CardStack.CardEventListener() {
             @Override
             public boolean swipeEnd(int i, float v) {
@@ -170,15 +185,24 @@ public class HomeActivity extends ToolbarActivity {
 
             @Override
             public void discarded(int i, int i1) {
-                if (i == topNoticesSize) {
+                if (i == topNoticeList.size()) {
                     cardStack.reset(true);
                 }
             }
 
             @Override
             public void topCardTapped() {
+                Notice notice = topNoticeList.get(cardStack.getCurrIndex());
+                showNoticeDialog(notice);
             }
         });
+    }
+
+    private void showNoticeDialog(Notice notice) {
+        new MaterialDialog.Builder(HomeActivity.this)
+                .title(notice.getTitle())
+                .content(notice.getContent())
+                .show();
     }
 
     private void fetchTopNotices() {
@@ -197,11 +221,57 @@ public class HomeActivity extends ToolbarActivity {
     }
 
     private void copeTopNoticesResponse(JSONArray response) {
-        final CardsDataAdapter mCardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
-        List<Notice> topNoticeList = GsonUtils.parseNoticeList(response.toString());
-        topNoticesSize = topNoticeList.size();
-        mCardAdapter.addAll(topNoticeList);
-        cardStack.setAdapter(mCardAdapter);
+        topNoticeList = GsonUtils.parseNoticeList(response.toString());
+        CardsDataAdapter cardsDataAdapter = new CardsDataAdapter(getApplicationContext(), 0);
+        if (topNoticeList.size() == 0) {
+            topNoticeList.add(getEmptyNotice());
+        }
+        cardsDataAdapter.addAll(topNoticeList);
+        cardStack.setAdapter(cardsDataAdapter);
+    }
+
+    private Notice getEmptyNotice() {
+        Notice notice = new Notice();
+        notice.setTitle("暂无公告");
+        notice.setContent("暂无公告");
+        notice.setEventTime(new Date().getTime());
+        return notice;
+    }
+
+
+    // ========================== show case ==========================
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.home, menu);
+        menu.findItem(R.id.help).setIcon(getActionDrawable());
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private Drawable getActionDrawable() {
+        return new IconDrawable(this, Iconify.IconValue.zmdi_pin_help)
+                .colorRes(android.R.color.white)
+                .actionBarSize();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.help:
+                showCase();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showCase() {
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setMaskColor(Color.parseColor("#cc111111"));
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);
+        sequence.setConfig(config);
+        sequence.addSequenceItem(banner, "点击新闻图片查看新闻详情", "我知道了");
+        sequence.addSequenceItem(cardStack, "向左下方或右下方滑动公告查看更多", "我知道了");
+        sequence.start();
     }
 
 }
