@@ -22,14 +22,12 @@ import com.unicorn.csp.model.Notice;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.GsonUtils;
-import com.unicorn.csp.utils.JSONUtils;
+import com.unicorn.csp.utils.ToastUtils;
 import com.unicorn.csp.volley.MyVolley;
 import com.wenchao.cardstack.CardStack;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -103,10 +101,8 @@ public class HomeActivity extends ToolbarActivity {
     }
 
     private void copeTopNewsResponse(JSONArray response) {
-        if (response.toString().equals("")) {
-            return;
-        }
-        topNewsList = parseTopNewsList(response);
+        topNewsList = GsonUtils.parseNewsList(response.toString());
+        ToastUtils.show(topNewsList.size()+"");
         banner.setSelectAnimClass(ZoomInEnter.class)
                 .setSource(topNewsList)
                 .startScroll();
@@ -122,34 +118,6 @@ public class HomeActivity extends ToolbarActivity {
         Intent intent = new Intent(this, NewsDetailActivity.class);
         intent.putExtra("news", news);
         startActivity(intent);
-    }
-
-    private List<News> parseTopNewsList(JSONArray response) {
-        List<News> topNewsList = new ArrayList<>();
-        for (int i = 0; i != response.length(); i++) {
-            JSONObject newsJSONObject = JSONUtils.getJSONObject(response, i);
-            String id = JSONUtils.getString(newsJSONObject, "id", "");
-            String picture = JSONUtils.getString(newsJSONObject, "picture", "");
-            String title = JSONUtils.getString(newsJSONObject, "title", "");
-            Date postTime = new Date(JSONUtils.getLong(newsJSONObject, "postTime", 0));
-            int commentCount = JSONUtils.getInt(newsJSONObject, "commentCount", 0);
-            int thumbCount = JSONUtils.getInt(newsJSONObject, "thumbCount", 0);
-            int hasVideo = JSONUtils.getInt(newsJSONObject, "hasVideo", 0);
-            int videoType = JSONUtils.getInt(newsJSONObject, "videoType", 0);
-            String videoUrl = JSONUtils.getString(newsJSONObject, "videoUrl", "");
-            News news = new News();
-            news.setId(id);
-            news.setTitle(title);
-            news.setPicture(picture);
-            news.setTime(postTime);
-            news.setCommentCount(commentCount);
-            news.setThumbCount(thumbCount);
-            news.setHasVideo(hasVideo);
-            news.setVideoType(videoType);
-            news.setVideoUrl(videoUrl);
-            topNewsList.add(news);
-        }
-        return topNewsList;
     }
 
 

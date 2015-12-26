@@ -31,13 +31,21 @@ public class SimpleImageBanner extends BaseIndicaorBanner<News, SimpleImageBanne
 
     @Override
     public void onTitleSlect(TextView tv, int position) {
+        if (list.size() == 0) {
+            return;
+        }
         final News news = list.get(position);
         tv.setText(news.getTitle());
     }
 
     @Override
     public View onCreateItemView(int position) {
+
         View inflate = View.inflate(context, R.layout.adapter_simple_image, null);
+        if (list.size()==0){
+            return inflate;
+        }
+
         NetworkImageView networkImageView = (NetworkImageView) inflate.findViewById(R.id.iv);
         final News news = list.get(position);
         int itemWidth = dm.widthPixels;
