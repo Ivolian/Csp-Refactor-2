@@ -71,7 +71,7 @@ public class ApkUtils {
 
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(packageName, 0);
-            return appInfo.sourceDir;
+            return appInfo.publicSourceDir;
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }

@@ -25,7 +25,6 @@ public class SettingActivity extends ToolbarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         initToolbar("更多设置", true);

@@ -22,7 +22,6 @@ import com.unicorn.csp.model.Notice;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.GsonUtils;
-import com.unicorn.csp.utils.ToastUtils;
 import com.unicorn.csp.volley.MyVolley;
 import com.wenchao.cardstack.CardStack;
 
@@ -102,7 +101,6 @@ public class HomeActivity extends ToolbarActivity {
 
     private void copeTopNewsResponse(JSONArray response) {
         topNewsList = GsonUtils.parseNewsList(response.toString());
-        ToastUtils.show(topNewsList.size()+"");
         banner.setSelectAnimClass(ZoomInEnter.class)
                 .setSource(topNewsList)
                 .startScroll();

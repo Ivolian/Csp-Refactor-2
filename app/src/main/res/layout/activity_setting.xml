@@ -86,7 +86,7 @@
             android:layout_height="70dp"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:text="  关于 (检测更新)"
+            android:text="  关于 "
             android:textSize="17sp" />
 
 

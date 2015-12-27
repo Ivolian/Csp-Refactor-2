@@ -36,7 +36,9 @@ import com.unicorn.csp.home.HomeActivity;
 import com.unicorn.csp.model.UserInfo;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.other.greenmatter.SelectColorActivity;
+import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.ToastUtils;
+import com.unicorn.csp.utils.UpdateUtils;
 
 import java.util.List;
 
@@ -77,7 +79,14 @@ public class MainActivity extends ToolbarActivity {
         } else {
             selectBottomTab(savedInstanceState.getInt(SELECTED), false);
         }
+
+        UpdateUtils.checkUpdate(this);
     }
+
+    private String getCurrentApkPath() {
+        return ConfigUtils.getDownloadDirPath() + "/app-1.1.apk";
+    }
+
 
     private void initViews() {
 
