@@ -98,7 +98,7 @@ public class UpdateUtils {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                downloadDialog.setTitle("下载分差包失败,请在关于中手动下载完整安装包");
+                downloadDialog.setTitle("下载分差包失败，请在关于中手动下载完整安装包");
                 downloadDialog.setCancelable(true);
             }
 
@@ -138,11 +138,11 @@ public class UpdateUtils {
             if (apkMd5Sign.equals(md5Sign)) {
                 installApk(new File(getApkPath()));
             } else {
-                downloadDialog.setTitle("MD5校验失败,请在关于中手动下载完整安装包");
+                downloadDialog.setTitle("MD5校验失败，请在关于中手动下载完整安装包");
                 downloadDialog.setCancelable(true);
             }
         } else {
-            downloadDialog.setTitle("合并失败,请在关于中手动下载完整安装包");
+            downloadDialog.setTitle("合并失败，请在关于中手动下载完整安装包");
             downloadDialog.setCancelable(true);
         }
     }
