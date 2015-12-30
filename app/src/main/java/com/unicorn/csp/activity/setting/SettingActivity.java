@@ -67,13 +67,11 @@ public class SettingActivity extends ToolbarActivity {
 
     @OnClick(R.id.tv_change_password)
     public void startChangePasswordActivity() {
-
         startActivity(ChangePasswordActivity.class);
     }
 
     @OnClick(R.id.tv_about)
     public void startAboutActivity() {
-
         startActivity(AboutActivity.class);
     }
 

@@ -23,6 +23,7 @@
             android:textSize="16sp" />
 
         <!--<TextView-->
+            <!--android:id="@+id/tv_personal_info"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="70dp"-->
             <!--android:background="?android:attr/selectableItemBackground"-->

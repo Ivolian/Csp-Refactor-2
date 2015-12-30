@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.malinskiy.materialicons.IconDrawable;
 import com.malinskiy.materialicons.Iconify;
-import com.mikepenz.iconics.typeface.FontAwesome;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -28,6 +28,7 @@ import com.unicorn.csp.activity.news.FavoriteNewsActivity;
 import com.unicorn.csp.activity.question.AddQuestionActivity;
 import com.unicorn.csp.activity.search.BookSearchActivity;
 import com.unicorn.csp.activity.search.NewsSearchActivity;
+import com.unicorn.csp.activity.setting.PersonalInfoActivity;
 import com.unicorn.csp.activity.setting.SettingActivity;
 import com.unicorn.csp.adapter.viewpager.ViewPagerAdapter;
 import com.unicorn.csp.greendao.Menu;
@@ -112,7 +113,7 @@ public class MainActivity extends ToolbarActivity {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("首页").withIcon(FontAwesome.Icon.faw_home).withIdentifier(0).withCheckable(false),
                         new PrimaryDrawerItem().withName("我的关注").withIcon(FontAwesome.Icon.faw_star).withIdentifier(1).withCheckable(false),
-                        new PrimaryDrawerItem().withName("互动专区").withIcon(FontAwesome.Icon.faw_group).withIdentifier(2).withCheckable(false),
+                        new PrimaryDrawerItem().withName("互动专区").withIcon(FontAwesome.Icon.faw_users).withIdentifier(2).withCheckable(false),
                         new PrimaryDrawerItem().withName("主题色彩").withIcon(FontAwesome.Icon.faw_paint_brush).withIdentifier(3).withCheckable(false),
                         new PrimaryDrawerItem().withName("用户登出").withIcon(FontAwesome.Icon.faw_sign_out).withIdentifier(4).withCheckable(false),
                         new PrimaryDrawerItem().withName("更多设置").withIcon(FontAwesome.Icon.faw_cog).withIdentifier(5).withCheckable(false)
@@ -168,6 +169,15 @@ public class MainActivity extends ToolbarActivity {
         tvReadTimes.setText("本月阅读: " + userInfo.getReadTimes());
         TextView tvLoginTimes = (TextView) header.findViewById(R.id.tv_login_times);
         tvLoginTimes.setText("本月登录: " + userInfo.getLoginTimes());
+
+        header.findViewById(R.id.civ_profile).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PersonalInfoActivity.class);
+                intent.putExtra("userId", ConfigUtils.getUserId());
+                startActivity(intent);
+            }
+        });
     }
 
     private void showChoiceDialog() {
