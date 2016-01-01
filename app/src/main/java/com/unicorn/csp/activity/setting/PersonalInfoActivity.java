@@ -15,6 +15,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.f2prateek.dart.InjectExtra;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.malinskiy.materialicons.IconDrawable;
 import com.malinskiy.materialicons.Iconify;
 import com.melnykov.fab.FloatingActionButton;
@@ -25,16 +28,19 @@ import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.JSONUtils;
 import com.unicorn.csp.utils.ToastUtils;
 import com.unicorn.csp.volley.MyVolley;
+import com.unicorn.csp.volley.toolbox.NetworkCircleImageView;
 import com.unicorn.csp.volley.toolbox.VolleyErrorHelper;
 
+import org.apache.http.Header;
 import org.json.JSONObject;
 import org.maestrodroid.takeandcroplib.ImageSelectionHelper;
 import org.maestrodroid.takeandcroplib.ImageSelectionListener;
 import org.maestrodroid.takeandcroplib.crop.CropType;
 
+import java.io.File;
+
 import butterknife.Bind;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class PersonalInfoActivity extends ToolbarActivity implements ImageSelectionListener {
@@ -47,6 +53,9 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
 
 
     // ============================== views 1 ================================
+
+    @Bind(R.id.nciv_avatar)
+    NetworkCircleImageView ncivAvatar;
 
     @Bind(R.id.tv_cn_name)
     TextView tvCnName;
@@ -75,17 +84,15 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
 
     // ============================== views 2 ================================
 
-    @Bind(R.id.loading_container)
-    FrameLayout flLoadingContainer;
-
     @Bind(R.id.content_container)
     ScrollView svContentContainer;
 
-    @Bind(R.id.civ_profile)
-    CircleImageView civProfile;
+    @Bind(R.id.loading_container)
+    FrameLayout flLoadingContainer;
 
     @Bind(R.id.fab)
-    FloatingActionButton fabUploadProfile;
+    FloatingActionButton fabTakePhoto;
+
 
     // ============================== onCreate ================================
 
@@ -98,21 +105,22 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
         enableSlidr();
     }
 
-    private void initViews() {
-        mImageSelectionHelper = new ImageSelectionHelper(this, this);
+    ImageSelectionHelper mImageSelectionHelper;
 
-        fabUploadProfile.setImageDrawable(getUploadProfileDrawable());
+    private void initViews() {
+        fabTakePhoto.setImageDrawable(getTakePhotoDrawable());
+        mImageSelectionHelper = new ImageSelectionHelper(this, this);
         fetchPersonalInfo();
     }
 
-    private Drawable getUploadProfileDrawable() {
+    private Drawable getTakePhotoDrawable() {
         return new IconDrawable(this, Iconify.IconValue.zmdi_camera)
                 .color(ColorOverrider.getInstance(this).getColorPrimary())
                 .sizeDp(36);
     }
 
 
-    // ============================== fetchPersonalInfo ================================
+    // ============================== 获取用户信息 ================================
 
     private void fetchPersonalInfo() {
         Request<JSONObject> jsonObjectRequest = new JsonObjectRequest(
@@ -141,12 +149,11 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
         return builder.toString();
     }
 
-    private void hideLoadingView() {
-        flLoadingContainer.setVisibility(View.INVISIBLE);
-        svContentContainer.setVisibility(View.VISIBLE);
-    }
-
     private void copeResponse(JSONObject response) {
+        String avatar = JSONUtils.getString(response, "avatar", "");
+        ToastUtils.show(avatar);
+        ncivAvatar.setImageUrl(ConfigUtils.getBaseUrl() + avatar, MyVolley.getImageLoader());
+        ncivAvatar.setDefaultImageResId(R.drawable.profile);
         tvCnName.setText(JSONUtils.getString(response, "cnName", ""));
         tvUsername.setText(JSONUtils.getString(response, "username", ""));
         tvCourt.setText(JSONUtils.getString(response, "courtName", ""));
@@ -155,19 +162,20 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
         tvTelephone.setText(JSONUtils.getString(response, "telephone", ""));
         tvQq.setText(JSONUtils.getString(response, "qq", ""));
         tvEmail.setText(JSONUtils.getString(response, "email", ""));
+    }
 
-
+    private void hideLoadingView() {
+        flLoadingContainer.setVisibility(View.INVISIBLE);
+        svContentContainer.setVisibility(View.VISIBLE);
     }
 
 
-    private ImageSelectionHelper mImageSelectionHelper;
-    //
+    // ============================== 选择和剪裁头像 ================================
 
     @OnClick(R.id.fab)
     public void civProfileOnClick() {
-        mImageSelectionHelper.startPhotoSelection(CropType.FREE);
+        mImageSelectionHelper.startPhotoSelection(CropType.SQUARE);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -179,7 +187,45 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
     @Override
     public void onImageSelected(String s) {
         if (!TextUtils.isEmpty(s)) {
-            civProfile.setImageURI(Uri.parse(s));
+            ncivAvatar.setImageURI(Uri.parse(s));
+            uploadAvatar(s);
         }
     }
+
+
+    private void uploadAvatar(String avatarPath) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        String url = ConfigUtils.getBaseUrl() + "/api/v1/user/uploadAvatar";
+        File myFile = new File(avatarPath);
+
+        RequestParams params = new RequestParams();
+
+        try {
+            params.put("Avatar", myFile);
+            params.put("userId", ConfigUtils.getUserId());
+        } catch (Exception e) {
+            //
+        }
+        client.post(
+                url,
+                params,
+                new AsyncHttpResponseHandler() {
+
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                        ToastUtils.show(new String(response));
+
+                        // called when response HTTP status is "200 OK"
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                        ToastUtils.show(e.getMessage());
+                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                    }
+
+                });
+    }
+
 }
