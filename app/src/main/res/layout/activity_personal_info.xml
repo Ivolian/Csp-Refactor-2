@@ -22,236 +22,253 @@
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         android:visibility="invisible">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@drawable/gm__solid_accent"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-                <me.grantland.widget.AutofitTextView
-                    android:id="@+id/atv_toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:textColor="@android:color/white"
-                    android:textSize="19sp" />
-
-            </android.support.v7.widget.Toolbar>
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/gm__solid_accent"
-                android:gravity="center_vertical"
-                android:minHeight="100dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
+                <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/gm__solid_accent"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/profile" />
+                    <me.grantland.widget.AutofitTextView
+                        android:id="@+id/atv_toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="@android:color/white"
+                        android:textSize="19sp" />
 
-                <TextView
-                    android:id="@+id/tv_cn_name"
-                    android:layout_width="wrap_content"
+                </android.support.v7.widget.Toolbar>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="张朝霞"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
+                    android:background="@drawable/gm__solid_accent"
+                    android:gravity="center_vertical"
+                    android:minHeight="100dp"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_profile"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/profile" />
+
+                    <TextView
+                        android:id="@+id/tv_cn_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="张朝霞"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:minHeight="60dp"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="20dp"
+                        app:iiv_color="@android:color/darker_gray"
+                        app:iiv_icon="faw-user" />
+
+                    <TextView
+                        android:id="@+id/tv_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="13611840424"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:minHeight="60dp"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="20dp"
+                        app:iiv_color="@android:color/darker_gray"
+                        app:iiv_icon="faw-university" />
+
+                    <TextView
+                        android:id="@+id/tv_court"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="贵州高级人民法院"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:minHeight="60dp"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="20dp"
+                        app:iiv_color="@android:color/darker_gray"
+                        app:iiv_icon="faw-sitemap" />
+
+                    <TextView
+                        android:id="@+id/tv_department"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="保卫处"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:minHeight="60dp"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="20dp"
+                        app:iiv_color="@android:color/darker_gray"
+                        app:iiv_icon="faw-street-view" />
+
+                    <TextView
+                        android:id="@+id/tv_position"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="处长"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:minHeight="60dp"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="20dp"
+                        app:iiv_color="@android:color/darker_gray"
+                        app:iiv_icon="faw-mobile" />
+
+                    <TextView
+                        android:id="@+id/tv_telephone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="13611840424"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:minHeight="60dp"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="20dp"
+                        app:iiv_color="@android:color/darker_gray"
+                        app:iiv_icon="faw-qq" />
+
+                    <TextView
+                        android:id="@+id/tv_qq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="993797097"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:minHeight="60dp"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="20dp"
+                        app:iiv_color="@android:color/darker_gray"
+                        app:iiv_icon="faw-envelope" />
+
+                    <TextView
+                        android:id="@+id/tv_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="993797097@qq.com"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:minHeight="60dp"
-                android:orientation="horizontal">
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="130dp"
 
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="20dp"
-                    app:iiv_color="@android:color/darker_gray"
-                    app:iiv_icon="faw-user" />
+                app:fab_colorRipple="?attr/colorAccent"
+                app:fab_colorNormal="@android:color/white" />
 
-                <TextView
-                    android:id="@+id/tv_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="13611840424"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:minHeight="60dp"
-                android:orientation="horizontal">
-
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="20dp"
-                    app:iiv_color="@android:color/darker_gray"
-                    app:iiv_icon="faw-university" />
-
-                <TextView
-                    android:id="@+id/tv_court"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="贵州高级人民法院"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:minHeight="60dp"
-                android:orientation="horizontal">
-
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="20dp"
-                    app:iiv_color="@android:color/darker_gray"
-                    app:iiv_icon="faw-sitemap" />
-
-                <TextView
-                    android:id="@+id/tv_department"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="保卫处"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:minHeight="60dp"
-                android:orientation="horizontal">
-
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="20dp"
-                    app:iiv_color="@android:color/darker_gray"
-                    app:iiv_icon="faw-street-view" />
-
-                <TextView
-                    android:id="@+id/tv_position"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="处长"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:minHeight="60dp"
-                android:orientation="horizontal">
-
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="20dp"
-                    app:iiv_color="@android:color/darker_gray"
-                    app:iiv_icon="faw-mobile" />
-
-                <TextView
-                    android:id="@+id/tv_telephone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="13611840424"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:minHeight="60dp"
-                android:orientation="horizontal">
-
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="20dp"
-                    app:iiv_color="@android:color/darker_gray"
-                    app:iiv_icon="faw-qq" />
-
-                <TextView
-                    android:id="@+id/tv_qq"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="993797097"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:minHeight="60dp"
-                android:orientation="horizontal">
-
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="20dp"
-                    app:iiv_color="@android:color/darker_gray"
-                    app:iiv_icon="faw-envelope" />
-
-                <TextView
-                    android:id="@+id/tv_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="993797097@qq.com"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        </FrameLayout>
 
     </ScrollView>
 
