@@ -5,7 +5,7 @@
     android:background="@color/background_material_light">
 
     <FrameLayout
-        android:id="@+id/loading_container"
+        android:id="@+id/loading_view_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -67,8 +67,7 @@
                         android:id="@+id/nciv_avatar"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:layout_marginLeft="20dp"
-                        />
+                        android:layout_marginLeft="20dp" />
 
                     <TextView
                         android:id="@+id/tv_cn_name"
@@ -258,15 +257,14 @@
             </LinearLayout>
 
             <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab"
+                android:id="@+id/fab_camera"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="right"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="130dp"
-
-                app:fab_colorRipple="?attr/colorAccent"
-                app:fab_colorNormal="@android:color/white" />
+                app:fab_colorNormal="@android:color/white"
+                app:fab_colorRipple="?attr/colorAccent" />
 
         </FrameLayout>
 

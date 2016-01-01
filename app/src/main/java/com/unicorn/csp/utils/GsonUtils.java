@@ -2,6 +2,7 @@ package com.unicorn.csp.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.unicorn.csp.model.Comment;
 import com.unicorn.csp.model.News;
 import com.unicorn.csp.model.Notice;
 
@@ -24,6 +25,14 @@ public class GsonUtils {
                 fromJson(str, new TypeToken<List<News>>() {
                 }.getType());
         return newsList;
+    }
+
+    public static List<Comment> parseCommentList(String str) {
+        Gson gson = new Gson();
+        List<Comment> commentList = gson.
+                fromJson(str, new TypeToken<List<Comment>>() {
+                }.getType());
+        return commentList;
     }
 
 }

@@ -23,6 +23,7 @@ import com.unicorn.csp.adapter.recyclerView.CommentAdapter;
 import com.unicorn.csp.model.Comment;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.utils.ConfigUtils;
+import com.unicorn.csp.utils.GsonUtils;
 import com.unicorn.csp.utils.JSONUtils;
 import com.unicorn.csp.utils.RecycleViewUtils;
 import com.unicorn.csp.utils.ToastUtils;
@@ -33,8 +34,6 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -195,20 +194,6 @@ public class CommentActivity extends ToolbarActivity {
         return builder.toString();
     }
 
-    private List<Comment> parseCommentList(JSONObject response) {
-
-        JSONArray commentJSONArray = JSONUtils.getJSONArray(response, "content", null);
-        List<Comment> commentList = new ArrayList<>();
-        for (int i = 0; i != commentJSONArray.length(); i++) {
-            JSONObject commentJSONObject = JSONUtils.getJSONObject(commentJSONArray, i);
-            String displayName = JSONUtils.getString(commentJSONObject, "displayName", "");
-            Date eventTime = new Date(JSONUtils.getLong(commentJSONObject, "eventtime", 0));
-            String content = JSONUtils.getString(commentJSONObject, "content", "");
-            commentList.add(new Comment(displayName, eventTime, content));
-        }
-        return commentList;
-    }
-
     public void reload() {
 
         clearPageData();
@@ -223,7 +208,9 @@ public class CommentActivity extends ToolbarActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         stopRefreshing();
-                        commentAdapter.setCommentList(parseCommentList(response));
+                        JSONArray commentJSONArray = JSONUtils.getJSONArray(response, "content", null);
+                        List<Comment> commentList = GsonUtils.parseCommentList(commentJSONArray.toString());
+                        commentAdapter.setCommentList(commentList);
                         commentAdapter.notifyDataSetChanged();
                         checkLastPage(response);
                     }
@@ -246,7 +233,8 @@ public class CommentActivity extends ToolbarActivity {
                     public void onResponse(JSONObject response) {
                         loadingMore = false;
                         pageNo++;
-                        commentAdapter.getCommentList().addAll(parseCommentList(response));
+                        JSONArray commentJSONArray = JSONUtils.getJSONArray(response, "content", null);
+                        commentAdapter.getCommentList().addAll(GsonUtils.parseCommentList(commentJSONArray.toString()));
                         commentAdapter.notifyDataSetChanged();
                         checkLastPage(response);
                     }

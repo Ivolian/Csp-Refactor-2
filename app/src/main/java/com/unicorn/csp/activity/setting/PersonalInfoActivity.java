@@ -85,13 +85,13 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
     // ============================== views 2 ================================
 
     @Bind(R.id.content_container)
-    ScrollView svContentContainer;
+    ScrollView contentContainer;
 
-    @Bind(R.id.loading_container)
-    FrameLayout flLoadingContainer;
+    @Bind(R.id.loading_view_container)
+    FrameLayout loadingViewContainer;
 
-    @Bind(R.id.fab)
-    FloatingActionButton fabTakePhoto;
+    @Bind(R.id.fab_camera)
+    FloatingActionButton fabCamera;
 
 
     // ============================== onCreate ================================
@@ -105,22 +105,22 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
         enableSlidr();
     }
 
-    ImageSelectionHelper mImageSelectionHelper;
-
     private void initViews() {
-        fabTakePhoto.setImageDrawable(getTakePhotoDrawable());
-        mImageSelectionHelper = new ImageSelectionHelper(this, this);
+        initFab();
         fetchPersonalInfo();
     }
 
-    private Drawable getTakePhotoDrawable() {
-        return new IconDrawable(this, Iconify.IconValue.zmdi_camera)
+    private void initFab() {
+        Drawable cameraDrawable = new IconDrawable(this, Iconify.IconValue.zmdi_camera)
                 .color(ColorOverrider.getInstance(this).getColorPrimary())
                 .sizeDp(36);
+        fabCamera.setImageDrawable(cameraDrawable);
+
+        // 如果不是本人查看个人信息，隐藏拍照按钮
+        if (!TextUtils.equals(userId, ConfigUtils.getUserId())) {
+            fabCamera.setVisibility(View.GONE);
+        }
     }
-
-
-    // ============================== 获取用户信息 ================================
 
     private void fetchPersonalInfo() {
         Request<JSONObject> jsonObjectRequest = new JsonObjectRequest(
@@ -151,9 +151,10 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
 
     private void copeResponse(JSONObject response) {
         String avatar = JSONUtils.getString(response, "avatar", "");
-        ToastUtils.show(avatar);
-        ncivAvatar.setImageUrl(ConfigUtils.getBaseUrl() + avatar, MyVolley.getImageLoader());
+        ncivAvatar.setErrorImageResId(R.drawable.profile);
         ncivAvatar.setDefaultImageResId(R.drawable.profile);
+        ncivAvatar.setImageUrl(ConfigUtils.getBaseUrl() + avatar, MyVolley.getImageLoader());
+
         tvCnName.setText(JSONUtils.getString(response, "cnName", ""));
         tvUsername.setText(JSONUtils.getString(response, "username", ""));
         tvCourt.setText(JSONUtils.getString(response, "courtName", ""));
@@ -165,67 +166,61 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
     }
 
     private void hideLoadingView() {
-        flLoadingContainer.setVisibility(View.INVISIBLE);
-        svContentContainer.setVisibility(View.VISIBLE);
+        loadingViewContainer.setVisibility(View.INVISIBLE);
+        contentContainer.setVisibility(View.VISIBLE);
     }
 
 
     // ============================== 选择和剪裁头像 ================================
 
-    @OnClick(R.id.fab)
-    public void civProfileOnClick() {
-        mImageSelectionHelper.startPhotoSelection(CropType.SQUARE);
+    ImageSelectionHelper imageSelectionHelper;
+
+    @OnClick(R.id.fab_camera)
+    public void fabCameraOnClick() {
+        if (imageSelectionHelper == null) {
+            imageSelectionHelper = new ImageSelectionHelper(this, this);
+        }
+        imageSelectionHelper.startPhotoSelection(CropType.SQUARE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mImageSelectionHelper != null) {
-            mImageSelectionHelper.onActivityResult(requestCode, resultCode, data);
+        if (imageSelectionHelper != null) {
+            imageSelectionHelper.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     @Override
-    public void onImageSelected(String s) {
-        if (!TextUtils.isEmpty(s)) {
-            ncivAvatar.setImageURI(Uri.parse(s));
-            uploadAvatar(s);
+    public void onImageSelected(String photoPath) {
+        if (!TextUtils.isEmpty(photoPath)) {
+            ncivAvatar.setImageURI(Uri.parse(photoPath));
+            uploadAvatar(photoPath);
         }
     }
-
 
     private void uploadAvatar(String avatarPath) {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = ConfigUtils.getBaseUrl() + "/api/v1/user/uploadAvatar";
-        File myFile = new File(avatarPath);
-
-        RequestParams params = new RequestParams();
-
+        RequestParams requestParams = new RequestParams();
         try {
-            params.put("Avatar", myFile);
-            params.put("userId", ConfigUtils.getUserId());
+            requestParams.put("userId", userId);
+            requestParams.put("Avatar", new File(avatarPath));
         } catch (Exception e) {
             //
         }
-        client.post(
-                url,
-                params,
+        client.post(url, requestParams,
                 new AsyncHttpResponseHandler() {
-
-
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                        ToastUtils.show(new String(response));
-
                         // called when response HTTP status is "200 OK"
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                        ToastUtils.show(e.getMessage());
                         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                     }
-
-                });
+                }
+        );
     }
 
 }
