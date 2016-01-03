@@ -31,6 +31,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private List<Comment> commentList = new ArrayList<>();
 
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.nciv_avatar)
@@ -51,45 +59,33 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
 
         @OnClick(R.id.nciv_avatar)
-        public void startPersonalInfoActivity(){
-            Activity activity = (Activity)ncivAvatar.getContext();
+        public void startPersonalInfoActivity() {
+            String userId = commentList.get(getAdapterPosition()).userId;
+            Activity activity = (Activity) ncivAvatar.getContext();
             Intent intent = new Intent(activity, PersonalInfoActivity.class);
-            intent.putExtra("userId",commentList.get(getAdapterPosition()).getUserId());
+            intent.putExtra("userId", userId);
             activity.startActivity(intent);
         }
-
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-
         return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_comment, viewGroup, false));
     }
 
     @Override
     public int getItemCount() {
-
         return commentList.size();
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-
         Comment comment = commentList.get(position);
-        viewHolder.ncivAvatar.setImageUrl(ConfigUtils.getBaseUrl()+comment.getAvatar(), MyVolley.getImageLoader());
+        viewHolder.ncivAvatar.setImageUrl(ConfigUtils.getBaseUrl() + comment.avatar, MyVolley.getImageLoader());
         viewHolder.ncivAvatar.setDefaultImageResId(R.drawable.profile);
-        viewHolder.tvDisplayName.setText(comment.getDisplayName());
-        viewHolder.tvEventTime.setText(DateUtils.getFormatDateString(new Date(comment.getEventTime()), new SimpleDateFormat("MM-dd HH:mm", Locale.CHINA)));
-        viewHolder.tvContent.setText(comment.getContent());
-    }
-
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
+        viewHolder.tvDisplayName.setText(comment.displayName);
+        viewHolder.tvEventTime.setText(DateUtils.getFormatDateString(new Date(comment.eventTime), new SimpleDateFormat("MM-dd HH:mm", Locale.CHINA)));
+        viewHolder.tvContent.setText(comment.content);
     }
 
 }

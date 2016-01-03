@@ -40,6 +40,8 @@ import com.unicorn.csp.other.greenmatter.SelectColorActivity;
 import com.unicorn.csp.utils.ConfigUtils;
 import com.unicorn.csp.utils.ToastUtils;
 import com.unicorn.csp.utils.UpdateUtils;
+import com.unicorn.csp.volley.MyVolley;
+import com.unicorn.csp.volley.toolbox.NetworkCircleImageView;
 
 import java.util.List;
 
@@ -170,7 +172,12 @@ public class MainActivity extends ToolbarActivity {
         TextView tvLoginTimes = (TextView) header.findViewById(R.id.tv_login_times);
         tvLoginTimes.setText("本月登录: " + userInfo.getLoginTimes());
 
-        header.findViewById(R.id.civ_profile).setOnClickListener(new View.OnClickListener() {
+        NetworkCircleImageView ncivAvatar = (NetworkCircleImageView) header.findViewById(R.id.nciv_avatar);
+        ncivAvatar.setErrorImageResId(R.drawable.profile);
+        ncivAvatar.setDefaultImageResId(R.drawable.profile);
+        String avatar = getIntent().getStringExtra("avatar");
+        ncivAvatar.setImageUrl(ConfigUtils.getBaseUrl() + avatar, MyVolley.getImageLoader());
+        ncivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, PersonalInfoActivity.class);

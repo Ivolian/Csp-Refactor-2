@@ -60,8 +60,11 @@ public class SplashActivity extends ButterKnifeActivity {
                             ConfigUtils.saveUserId(userId);
                             saveMenu(response);
 
+                            String avatar = JSONUtils.getString(response, "avatar", "");
                             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                            intent.putExtra("avatar", avatar);
                             intent.putExtra("userInfo", getUserInfo(response));
+
                             startActivity(intent);
                             finish();
                         } else {

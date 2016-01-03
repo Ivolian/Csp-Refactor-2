@@ -1,33 +1,13 @@
 package com.unicorn.csp.model;
 
-import java.util.Date;
-
-
 public class Thumb {
 
-    private String displayName;
+    public String userId;
 
-    private Date eventTime;
+    public String avatar;
 
-    public Thumb(String displayName, Date eventTime) {
-        this.displayName =displayName;
-        this.eventTime = eventTime;
-    }
+    public String displayName;
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public Date getEventTime() {
-        return eventTime;
-    }
-
-    public void setEventTime(Date eventTime) {
-        this.eventTime = eventTime;
-    }
+    public long eventTime;
 
 }

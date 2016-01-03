@@ -204,7 +204,7 @@ public class PersonalInfoActivity extends ToolbarActivity implements ImageSelect
         RequestParams requestParams = new RequestParams();
         try {
             requestParams.put("userId", userId);
-            requestParams.put("Avatar", new File(avatarPath));
+            requestParams.put("avatar", new File(avatarPath));
         } catch (Exception e) {
             //
         }

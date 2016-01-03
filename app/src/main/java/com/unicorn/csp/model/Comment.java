@@ -2,35 +2,14 @@ package com.unicorn.csp.model;
 
 public class Comment {
 
-    private String displayName;
+     public String userId;
 
-    private long eventTime;
+     public String avatar;
 
-    private String content;
+     public String displayName;
 
-    private String avatar;
+     public String content;
 
-    private String userId;
-
-  //
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public long getEventTime() {
-        return eventTime;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
+     public long eventTime;
 
 }

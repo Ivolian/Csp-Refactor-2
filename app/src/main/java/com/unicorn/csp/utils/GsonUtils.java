@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.unicorn.csp.model.Comment;
 import com.unicorn.csp.model.News;
 import com.unicorn.csp.model.Notice;
+import com.unicorn.csp.model.Thumb;
 
 import java.util.List;
 
@@ -35,4 +36,11 @@ public class GsonUtils {
         return commentList;
     }
 
+    public static List<Thumb> parseThumbList(String str) {
+        Gson gson = new Gson();
+        List<Thumb> thumbList = gson.
+                fromJson(str, new TypeToken<List<Thumb>>() {
+                }.getType());
+        return thumbList;
+    }
 }

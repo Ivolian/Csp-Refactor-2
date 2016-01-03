@@ -19,9 +19,9 @@ import com.melnykov.fab.FloatingActionButton;
 import com.unicorn.csp.R;
 import com.unicorn.csp.activity.base.ToolbarActivity;
 import com.unicorn.csp.adapter.recyclerView.ThumbAdapter;
-import com.unicorn.csp.model.Thumb;
 import com.unicorn.csp.other.greenmatter.ColorOverrider;
 import com.unicorn.csp.utils.ConfigUtils;
+import com.unicorn.csp.utils.GsonUtils;
 import com.unicorn.csp.utils.JSONUtils;
 import com.unicorn.csp.utils.RecycleViewUtils;
 import com.unicorn.csp.utils.ToastUtils;
@@ -31,10 +31,6 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -196,18 +192,7 @@ public class BookThumbActivity extends ToolbarActivity {
         return builder.toString();
     }
 
-    private List<Thumb> parseThumbList(JSONObject response) {
 
-        JSONArray thumbJSONArray = JSONUtils.getJSONArray(response, "content", null);
-        List<Thumb> thumbList = new ArrayList<>();
-        for (int i = 0; i != thumbJSONArray.length(); i++) {
-            JSONObject commentJSONObject = JSONUtils.getJSONObject(thumbJSONArray, i);
-            String displayName = JSONUtils.getString(commentJSONObject, "displayName", "");
-            Date eventTime = new Date(JSONUtils.getLong(commentJSONObject, "eventtime", 0));
-            thumbList.add(new Thumb(displayName, eventTime));
-        }
-        return thumbList;
-    }
 
     public void reload() {
 
@@ -223,7 +208,8 @@ public class BookThumbActivity extends ToolbarActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         stopRefreshing();
-                        thumbAdapter.setThumbList(parseThumbList(response));
+                        JSONArray jsonArray = JSONUtils.getJSONArray(response, "content", null);
+                        thumbAdapter.setThumbList(GsonUtils.parseThumbList(jsonArray.toString()));
                         thumbAdapter.notifyDataSetChanged();
                         checkLastPage(response);
                     }
@@ -246,7 +232,8 @@ public class BookThumbActivity extends ToolbarActivity {
                     public void onResponse(JSONObject response) {
                         loadingMore = false;
                         pageNo++;
-                        thumbAdapter.getThumbList().addAll(parseThumbList(response));
+                        JSONArray jsonArray = JSONUtils.getJSONArray(response, "content", null);
+                        thumbAdapter.getThumbList().addAll(GsonUtils.parseThumbList(jsonArray.toString()));
                         thumbAdapter.notifyDataSetChanged();
                         checkLastPage(response);
                     }

@@ -154,8 +154,11 @@ public class LoginActivity extends ToolbarActivity {
                             saveMenu(response);
                             storeLoginInfo();
 
+                            String avatar = JSONUtils.getString(response, "avatar", "");
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("avatar", avatar);
                             intent.putExtra("userInfo", getUserInfo(response));
+
                             startActivity(intent);
                             finish();
                         } else {

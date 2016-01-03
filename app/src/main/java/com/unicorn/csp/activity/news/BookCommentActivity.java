@@ -30,6 +30,7 @@ import com.unicorn.csp.volley.MyVolley;
 import com.unicorn.csp.volley.toolbox.VolleyErrorHelper;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import butterknife.Bind;
@@ -188,20 +189,6 @@ public class BookCommentActivity extends ToolbarActivity {
         return builder.toString();
     }
 
-//    private List<Comment> parseCommentList(JSONObject response) {
-//
-//        JSONArray commentJSONArray = JSONUtils.getJSONArray(response, "content", null);
-//        List<Comment> commentList = new ArrayList<>();
-//        for (int i = 0; i != commentJSONArray.length(); i++) {
-//            JSONObject commentJSONObject = JSONUtils.getJSONObject(commentJSONArray, i);
-//            String displayName = JSONUtils.getString(commentJSONObject, "displayName", "");
-//            Date eventTime = new Date(JSONUtils.getLong(commentJSONObject, "eventtime", 0));
-//            String content = JSONUtils.getString(commentJSONObject, "content", "");
-//            commentList.add(new Comment(displayName, eventTime, content));
-//        }
-//        return commentList;
-//    }
-
     public void reload() {
 
         clearPageData();
@@ -216,7 +203,8 @@ public class BookCommentActivity extends ToolbarActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         stopRefreshing();
-                        commentAdapter.setCommentList(GsonUtils.parseCommentList(response.toString()));
+                        JSONArray jsonArray = JSONUtils.getJSONArray(response, "content", null);
+                        commentAdapter.setCommentList(GsonUtils.parseCommentList(jsonArray.toString()));
                         commentAdapter.notifyDataSetChanged();
                         checkLastPage(response);
                     }
@@ -239,7 +227,8 @@ public class BookCommentActivity extends ToolbarActivity {
                     public void onResponse(JSONObject response) {
                         loadingMore = false;
                         pageNo++;
-                        commentAdapter.getCommentList().addAll(GsonUtils.parseCommentList(response.toString()));
+                        JSONArray jsonArray = JSONUtils.getJSONArray(response, "content", null);
+                        commentAdapter.getCommentList().addAll(GsonUtils.parseCommentList(jsonArray.toString()));
                         commentAdapter.notifyDataSetChanged();
                         checkLastPage(response);
                     }
