@@ -3,9 +3,11 @@ package com.unicorn.csp.activity.main;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
 import com.malinskiy.materialicons.IconDrawable;
 import com.malinskiy.materialicons.Iconify;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -84,8 +89,42 @@ public class MainActivity extends ToolbarActivity {
         }
 
         UpdateUtils.checkUpdate(this);
+//        useHandler();
     }
 
+
+      Handler mHandler;
+    public void useHandler() {
+        mHandler = new Handler();
+        mHandler.postDelayed(mRunnable, 5000);
+    }
+
+    private Runnable mRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    getUrl(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                        }
+                    },
+                    MyVolley.getDefaultErrorListener()
+            );
+            MyVolley.addRequest(stringRequest);    Log.e("Handlers", "Calls");
+            /** Do something **/
+            mHandler.postDelayed(mRunnable, 5000);
+        }
+    };
+    private String getUrl() {
+        Uri.Builder builder = Uri.parse(ConfigUtils.getBaseUrl() + "/api/v1/user/heartbeat?").buildUpon();
+        builder.appendQueryParameter("userId",ConfigUtils.getUserId());
+        return builder.toString();
+    }
     private String getCurrentApkPath() {
         return ConfigUtils.getDownloadDirPath() + "/app-1.1.apk";
     }
@@ -222,6 +261,7 @@ public class MainActivity extends ToolbarActivity {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
+                        mHandler.removeCallbacks(mRunnable);
                         startActivityAndFinish(LoginActivity.class);
                     }
                 })
@@ -248,6 +288,12 @@ public class MainActivity extends ToolbarActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        mHandler.removeCallbacks(mRunnable);
+        super.onDestroy();
+        Log.e("result","Main Activity is destory");
+    }
 
     // ========================== 主题色彩 ==========================
 

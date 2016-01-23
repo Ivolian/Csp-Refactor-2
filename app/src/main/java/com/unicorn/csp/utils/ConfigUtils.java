@@ -11,7 +11,7 @@ import java.io.File;
 public class ConfigUtils {
 
 //    public static String ip = "58.16.65.7";
-    public static String ip = "192.168.1.6";
+    public static String ip = "192.168.1.5";
 //    public static String ip = "115.28.239.33";
 
     public static String port = "3000";
